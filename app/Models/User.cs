@@ -18,11 +18,13 @@ namespace app.Models
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
-        public int IdChat { get; set; }
+        [Required]
+        public long IdChat { get; set; }
         public string? Surname { get; set; }
         public string? Name { get; set; }
         public string? Patronymic { get; set; }
         public int? StudentGroupId { get; set; }
         public StudentGroup? StudentGroup { get; set; }
+        //public List<StudentAttendance> studentAttendances
     }
 }

@@ -11,6 +11,7 @@ namespace app
         public DbSet<StudentGroup> StudentGroups { get; set; } = null!;
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<SheduleDay> Shedule { get; set; } = null!;
+        public DbSet<StudentAttendance> StudentAttendances { get; set; } = null!;
         
         protected readonly IConfiguration _configuration;
         public string connString;
@@ -45,17 +46,21 @@ namespace app
                 .HasIndex(u => u.IdChat)
                 .IsUnique();
 
-
             modelBuilder.Entity<StudentGroup>()
                 .Property(e => e.Field)
                 .HasConversion<string>();
 
             modelBuilder.Entity<User>().HasData(
-                    new User { Id = 1, Role = Role.student, IdChat = 597239235, Surname = "Османов", Name = "Микаил", Patronymic = "Альбертович", StudentGroupId = 1},
-                    new User { Id = 2, Role = Role.student, IdChat = 597239236, Surname = "Омардибиров", Name = "Алдан", Patronymic = "Маратович", StudentGroupId = 1},
-                    new User { Id = 3, Role = Role.student, IdChat = 597239238, Surname = "Аккаев", Name = "Магомед", Patronymic = "Магомедов", StudentGroupId = 1},
-                    new User { Id = 4, Role = Role.curator, IdChat = 597239239, Surname = "Шихмарданов", Name = "Султан", Patronymic = "Ахмедович", StudentGroupId = 1},
-                    new User { Id = 5, Role = Role.headboy, IdChat = 597239240, Surname = "Саидов", Name = "Саим", Patronymic = "Альбертович", StudentGroupId = 1}
+                    new User { Id = 1, Role = Role.student, IdChat = 597239235, Surname = "Микаилов", Name = "Микаил", Patronymic = "Микаилович", StudentGroupId = 1},
+                    new User { Id = 2, Role = Role.student, IdChat = 597239236, Surname = "Омардибиров", Name = "Алдан", Patronymic = "Алданович", StudentGroupId = 1},
+                    new User { Id = 3, Role = Role.student, IdChat = 597239238, Surname = "Магомедов", Name = "Магомед", Patronymic = "Магомедович", StudentGroupId = 1},
+                    new User { Id = 4, Role = Role.curator, IdChat = 597239239, Surname = "Деров", Name = "Дер", Patronymic = "Дерович", StudentGroupId = 1},
+                    new User { Id = 5, Role = Role.headboy, IdChat = 597239240, Surname = "Керов", Name = "Кер", Patronymic = "Керович", StudentGroupId = 1}
+            );
+            modelBuilder.Entity<StudentAttendance>().HasData(
+                    new StudentAttendance { Id = 1, StudentId = 1, NumberLesson = 1 },
+                    new StudentAttendance { Id = 2, StudentId = 2, NumberLesson = 2 },
+                    new StudentAttendance { Id = 3, StudentId = 3, NumberLesson = 2 }
             );
             modelBuilder.Entity<Subject>().HasData(
                     new Subject { Id = 1, Name = "МДК 01.01", TypeSubject = TypeSubject.Default},

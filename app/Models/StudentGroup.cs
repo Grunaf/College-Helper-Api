@@ -13,7 +13,6 @@ namespace app.Models
 
     public class StudentGroup
     {
-        [Key]
         public int Id { get; set; }
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]

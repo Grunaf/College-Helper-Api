@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using app;
 
@@ -11,9 +12,11 @@ using app;
 namespace app.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240511151543_AddStudentsAttendancesAndChangeTypeChatId")]
+    partial class AddStudentsAttendancesAndChangeTypeChatId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +72,23 @@ namespace app.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<byte>("NumberLesson")
-                        .HasColumnType("tinyint unsigned");
+                    b.Property<bool>("MissedFifthLesson")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MissedFirstLesson")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MissedFourthLesson")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MissedSecondLesson")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MissedSixthLesson")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("MissedThirdLesson")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<long>("StudentId")
                         .HasColumnType("bigint");
@@ -84,22 +102,25 @@ namespace app.Migrations
                         {
                             Id = 1,
                             Date = new DateTime(2024, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            NumberLesson = (byte)1,
+                            MissedFifthLesson = false,
+                            MissedFirstLesson = true,
+                            MissedFourthLesson = false,
+                            MissedSecondLesson = false,
+                            MissedSixthLesson = false,
+                            MissedThirdLesson = false,
                             StudentId = 1L
                         },
                         new
                         {
                             Id = 2,
                             Date = new DateTime(2024, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            NumberLesson = (byte)2,
+                            MissedFifthLesson = false,
+                            MissedFirstLesson = true,
+                            MissedFourthLesson = false,
+                            MissedSecondLesson = true,
+                            MissedSixthLesson = false,
+                            MissedThirdLesson = false,
                             StudentId = 2L
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Date = new DateTime(2024, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            NumberLesson = (byte)2,
-                            StudentId = 3L
                         });
                 });
 

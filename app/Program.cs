@@ -25,6 +25,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 builder.Services.AddDbContext<ApplicationContext>();
 
+builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

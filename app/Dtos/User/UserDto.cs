@@ -9,10 +9,11 @@ namespace app.Dtos.User
     {
         public int Id { get; set; }
         public string? Role { get; set; }
-        public int IdChat { get; set; }
+        public long IdChat { get; set; }
         public string? Surname { get; set; }
         public string? Name { get; set; }
-        public int? StudentGroupId { get; set; }
-        public StudentGroupDto? StudentGroup { get; set; }
+        public string? Patronymic { get; set; }
+/*        public int? StudentGroupId { get; set; }
+        public StudentGroupDto? StudentGroup { get; set; }*/
     }
 }

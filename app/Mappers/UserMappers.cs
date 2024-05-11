@@ -16,9 +16,10 @@ namespace app.Mappers
                 IdChat = userModel.IdChat,
                 Role = userModel.Role.ToString(),
                 Name = userModel.Name,
+                Patronymic = userModel.Patronymic,
                 Surname = userModel.Surname,
-                StudentGroupId = userModel.StudentGroupId,
-                StudentGroup = userModel.StudentGroup.ToStudentGroupDto()
+/*                StudentGroupId = userModel.StudentGroupId,
+                StudentGroup = userModel.StudentGroup.ToStudentGroupDto()*/
             };
         }
         public static User ToUserFromCreateDto(this CreateUserRequestDto userDto)
@@ -43,6 +44,16 @@ namespace app.Mappers
                 Surname = userDto.Surname,
                 Patronymic = userDto.Patronymic,
                 StudentGroupId = userDto.StudentGroupId
+            };
+        }
+        public static UserAttendanceDto ToUserAttendanceDto(this User userModel)
+        {
+            return new UserAttendanceDto
+            {
+                Id = userModel.Id,
+                Name = userModel.Name,
+                Surname = userModel.Surname,
+                Patronymic = userModel.Patronymic
             };
         }
     }

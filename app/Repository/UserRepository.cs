@@ -20,7 +20,7 @@ namespace app.Repository
             return userModel;
         }
 
-        public async Task<User?> DeleteAsync(int id)
+        public async Task<User?> DeleteAsync(long id)
         {
             var userModel = await _context.Users.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(x => x.Id == id);
             if (userModel == null)
@@ -39,7 +39,7 @@ namespace app.Repository
             return await _context.Users.Include(sg => sg.StudentGroup).ToListAsync();
         }
 
-        public async Task<User?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(long id)
         {
             var userModel = await _context.Users.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
 
@@ -51,7 +51,18 @@ namespace app.Repository
             return userModel;
         }
 
-        public async Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto)
+
+        public async Task<List<User>> GetStudentsByIdHeadBoyId(long id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.IdChat == id);
+            if (user.Role == Role.headboy)
+            {
+                return await _context.Users.Where(u => u.StudentGroupId == user.StudentGroupId).ToListAsync();
+            }
+            return null;
+        }
+
+        public async Task<User?> UpdateAsync(long id, UpdateUserRequestDto userDto)
         {
             var existingModel = await _context.Users.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
 

@@ -5,10 +5,11 @@ namespace app.Interfaces
 {
     public interface IUserRepository
     {
+        Task<List<User>> GetStudentsByIdHeadBoyId(long id);
         Task<List<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
+        Task<User?> GetByIdAsync(long id);
         Task<User> CreateAsync(User userModel);
-        Task<User?> DeleteAsync(int id);
-        Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto);
+        Task<User?> DeleteAsync(long id);
+        Task<User?> UpdateAsync(long id, UpdateUserRequestDto userDto);
     }
 }

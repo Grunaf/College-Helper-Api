@@ -1,4 +1,4 @@
-﻿using app.Dtos.User;
+﻿using app.Dtos.Student;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 

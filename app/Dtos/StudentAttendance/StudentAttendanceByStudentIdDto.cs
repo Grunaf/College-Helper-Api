@@ -4,7 +4,7 @@ namespace app.Dtos.StudentAttendanceRecord
 {
     public class StudentAttendanceByStudentIdDto
     {
-        public long StudentId { get; set; }
+        public int StudentId { get; set; }
         public DateTime Date { get; set; } 
         public bool MissedFirstLesson { get; set; }
         public bool MissedSecondLesson { get; set; }

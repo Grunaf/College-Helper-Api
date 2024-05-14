@@ -1,6 +1,6 @@
-﻿namespace app.Dtos.User
+﻿namespace app.Dtos.Student
 {
-    public class UserAttendanceDto
+    public class StudentAttendanceDto
     {
         public int Id { get; set; }
         public string? Surname { get; set; }

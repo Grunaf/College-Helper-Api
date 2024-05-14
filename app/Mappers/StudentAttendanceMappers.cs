@@ -23,14 +23,14 @@ namespace app.Mappers
                 Date = studentAttendanceModel.Date
             };
         }
-        public static StudentAttendance ToStudentAttendanceFromCreateDto(this StudentAttendanceCreateRequestDto studentAttendanceDto)
+        public static StudentAttendance ToStudentAttendanceFromCreateDto(this CreateStudentAttendanceRequestDto studentAttendanceDto)
         {
             return new StudentAttendance
             {
                 StudentId = studentAttendanceDto.StudentId
             };
         }
-        public static StudentAttendance ToStudentAttendanceFromUpdateDto(this StudentAttendanceUpdateRequestDto studentAttendanceDto)
+        public static StudentAttendance ToStudentAttendanceFromUpdateDto(this UpdateStudentAttendanceRequestDto studentAttendanceDto)
         {
             return new StudentAttendance
             {

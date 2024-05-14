@@ -1,4 +1,4 @@
-﻿using app.Dtos.User;
+﻿/*using app.Dtos.Student;
 using app.Interfaces;
 using app.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +10,8 @@ namespace app.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        private readonly IUserRepository _userRepo;
-        public UserController(ApplicationContext context, IUserRepository userRepo)
+        private readonly IStudentRepository _userRepo;
+        public UserController(ApplicationContext context, IStudentRepository userRepo)
         {
             _context = context;
             _userRepo = userRepo;
@@ -39,7 +39,7 @@ namespace app.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequestDto userDto)
+        public async Task<IActionResult> Create([FromBody] CreateStudentRequestDto userDto)
         {
             var userModel = userDto.ToUserFromCreateDto();
             await _userRepo.CreateAsync(userModel);
@@ -48,7 +48,7 @@ namespace app.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateUserRequestDto userDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStudentRequestDto userDto)
         {
             var userModel = await _userRepo.UpdateAsync(id, userDto);
             if (userModel == null)
@@ -72,3 +72,4 @@ namespace app.Controllers
             }
         }
 }
+*/

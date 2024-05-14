@@ -11,8 +11,8 @@ namespace app.Controllers
     public class StudentController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        private readonly IUserRepository _userRepo;
-        public StudentController(ApplicationContext context, IUserRepository userRepo) 
+        private readonly IStudentRepository _userRepo;
+        public StudentController(ApplicationContext context, IStudentRepository userRepo) 
         {
             _context = context;
             _userRepo = userRepo;

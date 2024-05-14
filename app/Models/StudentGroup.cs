@@ -20,9 +20,9 @@ namespace app.Models
         [Required]
         public int Number { get; set; }
         public int? CuratorId { get; set; }
-        public User? Curator { get; set; }
+        public Professor? Curator { get; set; }
         public int? HeadBoyId { get; set; }
-        public User? HeadBoy { get; set; }
-        public List<User?> Students { get; set; } = new List<User?>();
+        public Student? HeadBoy { get; set; }
+        public List<Student?> Students { get; set; } = new List<Student?>();
     }
 }

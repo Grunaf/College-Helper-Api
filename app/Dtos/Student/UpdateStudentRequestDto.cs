@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace app.Dtos.User
+namespace app.Dtos.Student
 {
-    public class CreateUserRequestDto
+    public class UpdateStudentRequestDto
     {
-        public string? Role { get; set; }
+        public bool IsHeadboy { get; set; }
         public int IdChat { get; set; }
         public string? Surname { get; set; }
         public string? Name { get; set; }

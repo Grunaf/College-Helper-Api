@@ -3,12 +3,12 @@ using app.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace app.Dtos.User
+namespace app.Dtos.Student
 {
-    public class UserDto
+    public class StudentDto
     {
         public int Id { get; set; }
-        public string? Role { get; set; }
+        public bool IsHeadBoy { get; set; }
         public long IdChat { get; set; }
         public string? Surname { get; set; }
         public string? Name { get; set; }

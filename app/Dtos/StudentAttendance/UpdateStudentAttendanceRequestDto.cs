@@ -1,6 +1,6 @@
 ﻿namespace app.Dtos.StudentAttendance
 {
-    public class StudentAttendanceUpdateRequestDto
+    public class UpdateStudentAttendanceRequestDto
     {
         public int Id { get; set; }
         public bool MissedFirstLesson { get; set; }

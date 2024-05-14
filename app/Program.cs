@@ -27,7 +27,7 @@ builder.Services.AddDbContext<ApplicationContext>();
 
 builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 var app = builder.Build();
 

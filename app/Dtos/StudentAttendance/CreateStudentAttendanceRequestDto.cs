@@ -1,8 +1,8 @@
 ﻿namespace app.Dtos.StudentAttendance
 {
-    public class StudentAttendanceCreateRequestDto
+    public class CreateStudentAttendanceRequestDto
     {
-        public long StudentId { get; set; }
+        public int StudentId { get; set; }
         public bool MissedFirstLesson { get; set; }
         public bool MissedSecondLesson { get; set; }
         public bool MissedThirdLesson { get; set; }

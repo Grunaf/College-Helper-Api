@@ -7,7 +7,8 @@ namespace app
 
     public class ApplicationContext : DbContext
     {
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Student> Students { get; set; } = null!;
+        public DbSet<Professor> Professors { get; set; } = null!;
         public DbSet<StudentGroup> StudentGroups { get; set; } = null!;
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<SheduleDay> Shedule { get; set; } = null!;
@@ -38,11 +39,7 @@ namespace app
                     new StudentGroup { Id = 1, Number = 20, Field = Field.ИСП }
             );
 
-            modelBuilder.Entity<User>()
-                .Property(e => e.Role)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Student>()
                 .HasIndex(u => u.IdChat)
                 .IsUnique();
 
@@ -50,12 +47,12 @@ namespace app
                 .Property(e => e.Field)
                 .HasConversion<string>();
 
-            modelBuilder.Entity<User>().HasData(
-                    new User { Id = 1, Role = Role.student, IdChat = 597239235, Surname = "Микаилов", Name = "Микаил", Patronymic = "Микаилович", StudentGroupId = 1},
-                    new User { Id = 2, Role = Role.student, IdChat = 597239236, Surname = "Омардибиров", Name = "Алдан", Patronymic = "Алданович", StudentGroupId = 1},
-                    new User { Id = 3, Role = Role.student, IdChat = 597239238, Surname = "Магомедов", Name = "Магомед", Patronymic = "Магомедович", StudentGroupId = 1},
-                    new User { Id = 4, Role = Role.curator, IdChat = 597239239, Surname = "Деров", Name = "Дер", Patronymic = "Дерович", StudentGroupId = 1},
-                    new User { Id = 5, Role = Role.headboy, IdChat = 597239240, Surname = "Керов", Name = "Кер", Patronymic = "Керович", StudentGroupId = 1}
+            modelBuilder.Entity<Student>().HasData(
+                    new Student { Id = 1, IsHeadBoy = true, IdChat = 597239235, Surname = "Микаилов", Name = "Микаил", Patronymic = "Микаилович", StudentGroupId = 1},
+                    new Student { Id = 2, IsHeadBoy = false, IdChat = 597239236, Surname = "Омардибиров", Name = "Алдан", Patronymic = "Алданович", StudentGroupId = 1},
+                    new Student { Id = 3, IsHeadBoy = false, IdChat = 597239238, Surname = "Магомедов", Name = "Магомед", Patronymic = "Магомедович", StudentGroupId = 1},
+                    new Student { Id = 4, IsHeadBoy = true, IdChat = 597239239, Surname = "Деров", Name = "Дер", Patronymic = "Дерович", StudentGroupId = 1},
+                    new Student { Id = 5, IsHeadBoy = false, IdChat = 597239240, Surname = "Керов", Name = "Кер", Patronymic = "Керович", StudentGroupId = 1}
             );
             modelBuilder.Entity<StudentAttendance>().HasData(
                     new StudentAttendance { Id = 1, StudentId = 1, NumberLesson = 1 },
@@ -78,15 +75,30 @@ namespace app
                     new Subject { Id = 13, Name = "Безопасность Жизндеятельности", TypeSubject = TypeSubject.Default },
                     new Subject { Id = 14, Name = "Экономика отросли", TypeSubject = TypeSubject.Default }
             );
-            modelBuilder.Entity<StudentGroup>()
-                .HasOne(sg => sg.Curator)
-                .WithMany()
-                .HasForeignKey(sg => sg.CuratorId);
+            modelBuilder.Entity<Student>()
+                .HasOne(s => s.StudentGroup)
+                .WithMany(g => g.Students)
+                .HasForeignKey(s => s.StudentGroupId);
 
             modelBuilder.Entity<StudentGroup>()
-                .HasOne(sg => sg.HeadBoy)
+                .HasMany(g => g.Students)
+                .WithOne(s => s.StudentGroup)
+                .HasForeignKey(s => s.StudentGroupId);
+
+            modelBuilder.Entity<StudentAttendance>()
+                .HasOne(sa => sa.Student)
                 .WithMany()
-                .HasForeignKey(sg => sg.HeadBoyId);
+                .HasForeignKey(sa => sa.StudentId);
+
+            /*            modelBuilder.Entity<StudentGroup>()
+                            .HasOne(sg => sg.Curator)
+                            .WithOne()
+                            .HasForeignKey(sg => sg.CuratorId);
+
+                        modelBuilder.Entity<StudentGroup>()
+                            .HasOne(sg => sg.HeadBoy)
+                            .WithOne(s => s.Id)
+                            .HasForeignKey(sg => sg.HeadBoyId);*/
         }
     }
 }

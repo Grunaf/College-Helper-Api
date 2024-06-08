@@ -8,3 +8,4 @@
 /obj/Debug/docker-compose.dcproj.AssemblyReference.cache
 /app/bin/Debug/net8.0/app.dll
 /app/bin/Debug/net8.0/app.pdb
+/app/obj/Debug/net8.0/app.assets.cache

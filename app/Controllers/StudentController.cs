@@ -11,23 +11,22 @@ namespace app.Controllers
     public class StudentController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        private readonly IStudentRepository _userRepo;
-        public StudentController(ApplicationContext context, IStudentRepository userRepo) 
+        private readonly IStudentService _studentService;
+        public StudentController(ApplicationContext context, IStudentService studentService) 
         {
             _context = context;
-            _userRepo = userRepo;
+            _studentService = studentService;
         }
 
-        [HttpGet("{headBoyId}")]
-        public async Task<IActionResult> GetStudentsByIdHeadBoyId(long headBoyId)
+        [HttpGet("{headBoyChatId}/{date}/{lessonNumber}")]
+        public async Task<IActionResult> GetStudentsByHeadBoyChatId(long headBoyChatId, DateTime date, byte lessonNumber)
         {
-            var users = await _userRepo.GetStudentsByIdHeadBoyId(headBoyId);
-            if (users == null)
+            var studentAttendanceDtos = await _studentService.GetStatusStudentFromListAttendanceAsync(headBoyChatId, date, lessonNumber);
+            if (studentAttendanceDtos == null)
             {
                 return NotFound();
             }
-            var usersDto = users.Select(u => u.ToUserAttendanceDto());
-            return Ok(usersDto);
+            return Ok(studentAttendanceDtos);
         }
     }
 }

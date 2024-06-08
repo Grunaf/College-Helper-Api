@@ -12,7 +12,6 @@ services:
        LANG: ru_RU.UTF-8  
      volumes:
        - ./dbdata:/var/lib/mysql
-       - ./mysql-initdb:/docker-entrypoint-initdb.d
      expose:
        - "${SQL_INTERNAL_PORT}"
      ports:

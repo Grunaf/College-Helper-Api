@@ -1,16 +1,10 @@
 ﻿namespace app.Models
 {
-    public enum TypeSubject
-    {
-        Default,
-        Lecture,
-        Lab
-    }
     public class Subject
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public TypeSubject TypeSubject { get; set; }
-        public bool isExpired { get; set; } = false;
+        public string Title { get; set; }
+        public List<SheduleDaySubject> SheduleDaySubjects { get; set; } = new List<SheduleDaySubject>();
+        public bool IsExpired { get; set; } = false;
     }
 }

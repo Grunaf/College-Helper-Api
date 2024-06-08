@@ -14,15 +14,13 @@ namespace app.Models
     public class Student
     {
         public int Id { get; set; }
-        [Required]
         public bool IsHeadBoy { get; set; }
-        [Required]
-        public long IdChat { get; set; }
+        public long ChatId { get; set; }
         public string? Surname { get; set; } = "";
         public string? Name { get; set; } = "";
         public string? Patronymic { get; set; } = "";
-        public int? StudentGroupId { get; set; }
-        public StudentGroup? StudentGroup { get; set; }
-        public List<StudentAttendance> studentAttendances { get; set; }
+        public int StudentGroupId { get; set; }
+        public StudentGroup StudentGroup { get; set; }
+        public List<StudentAbsence> StudentAbsence { get; set; }
     }
 }

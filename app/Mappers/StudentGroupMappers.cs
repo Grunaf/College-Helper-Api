@@ -15,7 +15,6 @@ namespace app.Mappers
                 Number = groupModel.Number,
                 CuratorId = groupModel.CuratorId,
                 //Curator = groupModel.Curator.ToUserDto(),
-                HeadBoyId = groupModel.HeadBoyId,
                 //HeadBoy = groupModel.HeadBoy.ToUserDto(),
             };
         }

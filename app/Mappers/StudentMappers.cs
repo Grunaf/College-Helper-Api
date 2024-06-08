@@ -13,7 +13,7 @@ namespace app.Mappers
             return new StudentDto
             {
                 Id = studentModel.Id,
-                IdChat = studentModel.IdChat,
+                IdChat = studentModel.ChatId,
                 IsHeadBoy = studentModel.IsHeadBoy,
                 Name = studentModel.Name,
                 Patronymic = studentModel.Patronymic,
@@ -26,7 +26,7 @@ namespace app.Mappers
         {
             return new Student
             {
-                IdChat = studentDto.IdChat,
+                ChatId = studentDto.IdChat,
                 IsHeadBoy = studentDto.IsHeadboy,
                 Name = studentDto.Name,
                 Surname = studentDto.Surname,
@@ -38,7 +38,7 @@ namespace app.Mappers
         {
             return new Student
             {
-                IdChat = studentDto.IdChat,
+                ChatId = studentDto.IdChat,
                 IsHeadBoy = studentDto.IsHeadboy,
                 Name = studentDto.Name,
                 Surname = studentDto.Surname,
@@ -46,7 +46,7 @@ namespace app.Mappers
                 StudentGroupId = studentDto.StudentGroupId
             };
         }
-        public static StudentAttendanceDto ToUserAttendanceDto(this Student studentModel)
+/*        public static StudentAttendanceDto ToUserAttendanceDto(this Student studentModel)
         {
             return new StudentAttendanceDto
             {
@@ -55,6 +55,6 @@ namespace app.Mappers
                 Surname = studentModel.Surname,
                 Patronymic = studentModel.Patronymic
             };
-        }
+        }*/
     }
 }

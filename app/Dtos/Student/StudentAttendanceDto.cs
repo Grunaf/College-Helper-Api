@@ -1,4 +1,4 @@
-﻿namespace app.Dtos.Student
+﻿/*namespace app.Dtos.Student
 {
     public class StudentAttendanceDto
     {
@@ -8,3 +8,4 @@
         public string? Patronymic { get; set; }
     }
 }
+*/

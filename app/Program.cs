@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using app;
 using app.Interfaces;
 using app.Repository;
+using app.Services;
 
 IConfigurationRoot configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -25,9 +26,15 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 builder.Services.AddDbContext<ApplicationContext>();
 
-builder.Services.AddScoped<IStudentAttendanceRepository, StudentAttendanceRepository>();
+builder.Services.AddScoped<IStudentAbsenceService, StudentAbsenceService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISheduleService, SheduleService>();
+
+builder.Services.AddScoped<IStudentAbsenceRepository, StudentAbsenceRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
+builder.Services.AddScoped<ISheduleRepository, SheduleRepository>();
 
 var app = builder.Build();
 

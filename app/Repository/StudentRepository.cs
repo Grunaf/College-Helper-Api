@@ -39,7 +39,13 @@ namespace app.Repository
             return await _context.Students.Include(sg => sg.StudentGroup).ToListAsync();
         }
 
-        public async Task<Student?> GetByIdAsync(long id)
+        public async Task<Student?> GetByChatIdAsync(long chatId)
+        {
+            var userModel = await _context.Students.FirstOrDefaultAsync(s => s.ChatId == chatId);
+            return userModel ?? throw new InvalidOperationException();
+        }
+
+        public async Task<Student?> GetByIdAsync(int id)
         {
             var userModel = await _context.Students.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
 
@@ -51,13 +57,16 @@ namespace app.Repository
             return userModel;
         }
 
-
-        public async Task<List<Student>> GetStudentsByIdHeadBoyId(long id)
+        public async Task<List<Student>> GetStudentsByHeadBoyChatIdAsync(long chatId)
         {
-            var user = await _context.Students.FirstOrDefaultAsync(u => u.IdChat == id);
-            if (user.IsHeadBoy)
+            var headBoy = await _context.Students.FirstOrDefaultAsync(u => u.ChatId == chatId);
+
+            if (headBoy != null)
             {
-                return await _context.Students.Where(u => u.StudentGroupId == user.StudentGroupId).ToListAsync();
+                if (headBoy.IsHeadBoy)
+                {
+                    return await _context.Students.Where(u => u.StudentGroupId == headBoy.StudentGroupId).ToListAsync();
+                }
             }
             return null;
         }
@@ -68,7 +77,7 @@ namespace app.Repository
 
             if (existingModel == null) return null;
 
-            existingModel.IdChat = studentDto.IdChat;
+            existingModel.ChatId = studentDto.IdChat;
             existingModel.IsHeadBoy = studentDto.IsHeadboy;
             existingModel.Surname = studentDto.Surname;
             existingModel.Name = studentDto.Name;

@@ -13,17 +13,12 @@ namespace app.Models
 
     public class StudentGroup
     {
-        [Key]
         public int Id { get; set; }
-        [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Field Field { get; set; }
-        [Required]
         public int Number { get; set; }
         public int? CuratorId { get; set; }
-        public User? Curator { get; set; }
-        public int? HeadBoyId { get; set; }
-        public User? HeadBoy { get; set; }
-        public List<User?> Students { get; set; } = new List<User?>();
+        public Professor Curator { get; set; }
+        public Student HeadBoy { get; set; }
     }
 }

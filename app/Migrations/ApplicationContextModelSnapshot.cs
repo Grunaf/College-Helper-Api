@@ -22,6 +22,34 @@ namespace app.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("app.Models.Professor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("IdChat")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsCurator")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Patronymic")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Professors");
+                });
+
             modelBuilder.Entity("app.Models.SheduleDay", b =>
                 {
                     b.Property<int>("Id")
@@ -30,32 +58,186 @@ namespace app.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<short>("CountWeek")
-                        .HasColumnType("smallint");
+                    b.Property<byte>("CountDay")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<int?>("FirstSubjectId")
-                        .HasColumnType("int");
+                    b.Property<byte>("CountWeek")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<int?>("FourthSubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SecondSubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ThirdSubjectId")
+                    b.Property<int>("StudentGroupId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FirstSubjectId");
+                    b.HasIndex("StudentGroupId");
 
-                    b.HasIndex("FourthSubjectId");
+                    b.ToTable("SheduleDays");
+                });
 
-                    b.HasIndex("SecondSubjectId");
+            modelBuilder.Entity("app.Models.SheduleDaySubject", b =>
+                {
+                    b.Property<int>("SheduleDayId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ThirdSubjectId");
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
 
-                    b.ToTable("Shedule");
+                    b.Property<byte>("Spot")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<string>("SubgroupSequence")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("SheduleDayId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("SheduleDaySubjects");
+                });
+
+            modelBuilder.Entity("app.Models.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsHeadBoy")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Patronymic")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("StudentGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId")
+                        .IsUnique();
+
+                    b.HasIndex("StudentGroupId");
+
+                    b.ToTable("Students");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ChatId = 597239235L,
+                            IsHeadBoy = true,
+                            Name = "Микаил",
+                            Patronymic = "Микаилович",
+                            StudentGroupId = 1,
+                            Surname = "Микаилов"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ChatId = 597239236L,
+                            IsHeadBoy = false,
+                            Name = "Алдан",
+                            Patronymic = "Алданович",
+                            StudentGroupId = 1,
+                            Surname = "Омардибиров"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ChatId = 597239237L,
+                            IsHeadBoy = false,
+                            Name = "Магомед",
+                            Patronymic = "Магомедович",
+                            StudentGroupId = 1,
+                            Surname = "Магомедов"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ChatId = 6418436193L,
+                            IsHeadBoy = true,
+                            Name = "Дер",
+                            Patronymic = "Дерович",
+                            StudentGroupId = 2,
+                            Surname = "Деров"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ChatId = 597239249L,
+                            IsHeadBoy = false,
+                            Name = "Кер",
+                            Patronymic = "Керович",
+                            StudentGroupId = 2,
+                            Surname = "Керов"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ChatId = 597239239L,
+                            IsHeadBoy = false,
+                            Name = "Вер",
+                            Patronymic = "Верович",
+                            StudentGroupId = 2,
+                            Surname = "Веров"
+                        });
+                });
+
+            modelBuilder.Entity("app.Models.StudentAbsence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<byte>("LessonNumber")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentAbsence");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            LessonNumber = (byte)1,
+                            StudentId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            LessonNumber = (byte)2,
+                            StudentId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            LessonNumber = (byte)2,
+                            StudentId = 4
+                        });
                 });
 
             modelBuilder.Entity("app.Models.StudentGroup", b =>
@@ -73,17 +255,12 @@ namespace app.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("HeadBoyId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CuratorId");
-
-                    b.HasIndex("HeadBoyId");
 
                     b.ToTable("StudentGroups");
 
@@ -93,6 +270,12 @@ namespace app.Migrations
                             Id = 1,
                             Field = "ИСП",
                             Number = 20
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Field = "ИСП",
+                            Number = 21
                         });
                 });
 
@@ -104,15 +287,12 @@ namespace app.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("TypeSubject")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isExpired")
-                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -122,241 +302,172 @@ namespace app.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "МДК 01.01",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "МДК 01.03",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "МДК 01.04",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "МДК 01.05",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "МДК 11.01",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "МДК 01.01",
-                            TypeSubject = 2,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "МДК 01.03",
-                            TypeSubject = 2,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "МДК 01.04",
-                            TypeSubject = 2,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "МДК 01.05",
-                            TypeSubject = 2,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "МДК 11.01",
-                            TypeSubject = 2,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Физ-ра",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "Физ-ра"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Иностранный язык",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "Иностранный язык"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "Безопасность Жизндеятельности",
-                            TypeSubject = 0,
-                            isExpired = false
+                            IsExpired = false,
+                            Title = "Безопасность Жизндеятельности"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Экономика отросли",
-                            TypeSubject = 0,
-                            isExpired = false
-                        });
-                });
-
-            modelBuilder.Entity("app.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdChat")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Patronymic")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("StudentGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdChat")
-                        .IsUnique();
-
-                    b.HasIndex("StudentGroupId");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IdChat = 597239235,
-                            Name = "Микаил",
-                            Patronymic = "Альбертович",
-                            Role = "student",
-                            StudentGroupId = 1,
-                            Surname = "Османов"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IdChat = 597239236,
-                            Name = "Алдан",
-                            Patronymic = "Маратович",
-                            Role = "student",
-                            StudentGroupId = 1,
-                            Surname = "Омардибиров"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IdChat = 597239238,
-                            Name = "Магомед",
-                            Patronymic = "Магомедов",
-                            Role = "student",
-                            StudentGroupId = 1,
-                            Surname = "Аккаев"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IdChat = 597239239,
-                            Name = "Султан",
-                            Patronymic = "Ахмедович",
-                            Role = "curator",
-                            StudentGroupId = 1,
-                            Surname = "Шихмарданов"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IdChat = 597239240,
-                            Name = "Саим",
-                            Patronymic = "Альбертович",
-                            Role = "headboy",
-                            StudentGroupId = 1,
-                            Surname = "Саидов"
+                            IsExpired = false,
+                            Title = "Экономика отросли"
                         });
                 });
 
             modelBuilder.Entity("app.Models.SheduleDay", b =>
                 {
-                    b.HasOne("app.Models.Subject", "FirstSubject")
+                    b.HasOne("app.Models.StudentGroup", "StudentGroup")
                         .WithMany()
-                        .HasForeignKey("FirstSubjectId");
+                        .HasForeignKey("StudentGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("app.Models.Subject", "FourthSubject")
-                        .WithMany()
-                        .HasForeignKey("FourthSubjectId");
+                    b.Navigation("StudentGroup");
+                });
 
-                    b.HasOne("app.Models.Subject", "SecondSubject")
-                        .WithMany()
-                        .HasForeignKey("SecondSubjectId");
+            modelBuilder.Entity("app.Models.SheduleDaySubject", b =>
+                {
+                    b.HasOne("app.Models.SheduleDay", "SheduleDay")
+                        .WithMany("SheduleDaySubjects")
+                        .HasForeignKey("SheduleDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("app.Models.Subject", "ThirdSubject")
-                        .WithMany()
-                        .HasForeignKey("ThirdSubjectId");
+                    b.HasOne("app.Models.Subject", "Subject")
+                        .WithMany("SheduleDaySubjects")
+                        .HasForeignKey("SubjectId");
 
-                    b.Navigation("FirstSubject");
+                    b.Navigation("SheduleDay");
 
-                    b.Navigation("FourthSubject");
+                    b.Navigation("Subject");
+                });
 
-                    b.Navigation("SecondSubject");
+            modelBuilder.Entity("app.Models.Student", b =>
+                {
+                    b.HasOne("app.Models.StudentGroup", "StudentGroup")
+                        .WithOne("HeadBoy")
+                        .HasForeignKey("app.Models.Student", "StudentGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ThirdSubject");
+                    b.Navigation("StudentGroup");
+                });
+
+            modelBuilder.Entity("app.Models.StudentAbsence", b =>
+                {
+                    b.HasOne("app.Models.Student", "Student")
+                        .WithMany("StudentAbsence")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("app.Models.StudentGroup", b =>
                 {
-                    b.HasOne("app.Models.User", "Curator")
-                        .WithMany()
+                    b.HasOne("app.Models.Professor", "Curator")
+                        .WithMany("StudentGroups")
                         .HasForeignKey("CuratorId");
 
-                    b.HasOne("app.Models.User", "HeadBoy")
-                        .WithMany()
-                        .HasForeignKey("HeadBoyId");
-
                     b.Navigation("Curator");
-
-                    b.Navigation("HeadBoy");
                 });
 
-            modelBuilder.Entity("app.Models.User", b =>
+            modelBuilder.Entity("app.Models.Professor", b =>
                 {
-                    b.HasOne("app.Models.StudentGroup", "StudentGroup")
-                        .WithMany()
-                        .HasForeignKey("StudentGroupId");
+                    b.Navigation("StudentGroups");
+                });
 
-                    b.Navigation("StudentGroup");
+            modelBuilder.Entity("app.Models.SheduleDay", b =>
+                {
+                    b.Navigation("SheduleDaySubjects");
+                });
+
+            modelBuilder.Entity("app.Models.Student", b =>
+                {
+                    b.Navigation("StudentAbsence");
+                });
+
+            modelBuilder.Entity("app.Models.StudentGroup", b =>
+                {
+                    b.Navigation("HeadBoy")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("app.Models.Subject", b =>
+                {
+                    b.Navigation("SheduleDaySubjects");
                 });
 #pragma warning restore 612, 618
         }

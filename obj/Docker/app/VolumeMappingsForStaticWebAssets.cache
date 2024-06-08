@@ -1,1 +1,1 @@
-{"D:\\Programming\\college_helper_api":"/src","C:\\Users\\petr-\\.nuget\\packages\\":"/.nuget/packages","C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages":"/.nuget/fallbackpackages"}
+[{"SourcePath":"D:\\Programming\\college_helper_api","TargetPath":"/src","ReadOnly":false},{"SourcePath":"C:\\Users\\petr-\\.nuget\\packages","TargetPath":"/.nuget/packages","ReadOnly":true},{"SourcePath":"C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages","TargetPath":"/.nuget/fallbackpackages","ReadOnly":true}]

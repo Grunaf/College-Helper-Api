@@ -25,9 +25,8 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./app.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-COPY ./mysql-initdb/init.sql /docker-entrypoint-initdb.d/
 WORKDIR /app/migrations
-COPY --from=migration /app/migrations .
+COPY --from=migrations /app/migrations .
 
 WORKDIR /app
 COPY --from=publish /app/publish .

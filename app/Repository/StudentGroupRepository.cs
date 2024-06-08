@@ -38,11 +38,19 @@ namespace app.Repository
             return await _context.StudentGroups.ToListAsync();
         }
 
+        public async Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId)
+        {
+            var studentGroupModel = await _context.StudentGroups.Include(s => s.HeadBoy)
+                                    .Where(sg => sg.HeadBoy != null)
+                                    .FirstOrDefaultAsync(sg => sg.HeadBoy.ChatId == headBoyChatId);
+
+            return studentGroupModel ?? throw new InvalidOperationException();
+        }
+
         public async Task<StudentGroup?> GetByIdAsync(int id)
         {
             var studentGroupModel = await _context.StudentGroups.FindAsync(id);
-            if (studentGroupModel == null) return null;
-            return studentGroupModel;
+            return studentGroupModel ?? throw new InvalidOperationException();
         }
 
         public async Task<StudentGroup> UpdateAsync(int id, UpdateStudentGroupRequestDto studentGroupDto)
@@ -52,7 +60,6 @@ namespace app.Repository
 
             existingModel.Field = (Field)Enum.Parse(typeof(Field), studentGroupDto.Field);
             existingModel.Number = studentGroupDto.Number;
-            existingModel.HeadBoyId = studentGroupDto.HeadBoyId;
             existingModel.CuratorId = studentGroupDto.CuratorId;
 
             await _context.SaveChangesAsync();

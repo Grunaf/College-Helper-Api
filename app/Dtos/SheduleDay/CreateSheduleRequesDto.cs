@@ -2,7 +2,7 @@
 {
     public class CreateSheduleRequestDto
     {
-        public WeekDto[] Weeks { get; set; }
+        public WeekDto[] Weeks { get; set; } = new WeekDto[2];
     }
 
     public class WeekDto

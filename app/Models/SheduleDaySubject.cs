@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace app.Models
 {
     public class SheduleDaySubject
-    {   
+    {
         public int SheduleDayId { get; set; }
         public SheduleDay SheduleDay { get; set; }
         public int SubjectId { get; set; }

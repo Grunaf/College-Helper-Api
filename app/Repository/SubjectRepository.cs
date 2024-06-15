@@ -17,6 +17,21 @@ namespace app.Repository
             await _context.SaveChangesAsync();
             return subjectModel;
         }
+
+        public async Task<List<Subject>> GetAllActualByStudentGroupIdAsync(int studentGroupId)
+        {
+            return await _context.Subjects
+            .Include(s => s.StudentGroupSubjects)
+            .Where(s => s.StudentGroupSubjects.Any(sgs => sgs.StudentGroupId == studentGroupId && sgs.IsExpired == false))
+            .ToListAsync();
+        }
+        public async Task<List<Subject>> GetAllByStudentGroupIdAsync(int studentGroupId)
+        {
+            return await _context.Subjects
+            .Include(s => s.StudentGroupSubjects)
+            .Where(s => s.StudentGroupSubjects.Any(sgs => sgs.StudentGroupId == studentGroupId))
+            .ToListAsync();
+        }
         public async Task<Subject?> GetByNameAsync(string title)
         {
             var subjectModel = await _context.Subjects

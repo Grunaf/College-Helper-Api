@@ -9,3 +9,15 @@
 /app/bin/Debug/net8.0/app.dll
 /app/bin/Debug/net8.0/app.pdb
 /app/obj/Debug/net8.0/app.assets.cache
+/obj/Debug/docker-compose.dcproj.FileListAbsolute.txt
+/bin/Debug/BouncyCastle.Cryptography.dll
+/bin/Debug/Google.Protobuf.dll
+/bin/Debug/K4os.Compression.LZ4.dll
+/bin/Debug/K4os.Compression.LZ4.Streams.dll
+/bin/Debug/K4os.Hash.xxHash.dll
+/bin/Debug/MySql.Data.dll
+/bin/Debug/System.Configuration.ConfigurationManager.dll
+/bin/Debug/System.Security.Cryptography.ProtectedData.dll
+/bin/Debug/System.Security.Permissions.dll
+/bin/Debug/System.Windows.Extensions.dll
+/bin/Debug/ZstdSharp.dll

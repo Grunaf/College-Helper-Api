@@ -42,19 +42,13 @@ namespace app.Repository
         public async Task<Student?> GetByChatIdAsync(long chatId)
         {
             var userModel = await _context.Students.FirstOrDefaultAsync(s => s.ChatId == chatId);
-            return userModel ?? throw new InvalidOperationException();
+            return userModel ?? throw new InvalidOperationException("Пользователь не найден");
         }
 
         public async Task<Student?> GetByIdAsync(int id)
         {
             var userModel = await _context.Students.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
-
-            if (userModel == null)
-            {
-                return null;
-            }
-
-            return userModel;
+            return userModel ?? throw new InvalidOperationException("Пользователь не найден");
         }
 
         public async Task<List<Student>> GetStudentsByHeadBoyChatIdAsync(long chatId)

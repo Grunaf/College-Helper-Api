@@ -1,6 +1,5 @@
 ﻿using app.Dtos.StudentGroup;
 using app.Models;
-using System.Runtime.CompilerServices;
 
 namespace app.Mappers
 {

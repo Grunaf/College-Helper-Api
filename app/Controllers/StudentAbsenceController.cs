@@ -1,9 +1,6 @@
 ﻿using app.Dtos.StudentAbsence;
-using app.Interfaces;
-using app.Mappers;
-using Microsoft.AspNetCore.Http.HttpResults;
+using app.Interfaces.StudentAbsense;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace app.Controllers
 {
@@ -40,41 +37,5 @@ namespace app.Controllers
             }
             return Ok(statStudentAbsense);
         }
-        /*        [HttpGet("{headBoyChatId}")]
-                public async Task<IActionResult> GetStudentAttendanceGroupByNumLesson(long headBoyChatId)
-                {
-                    var attendances = await _studentAttendanceRepo.GetAllByHeadBoyChatIdAsync(headBoyChatId);
-
-                    if (attendances == null)
-                    {
-                        return NotFound();
-                    }
-                    var attendancesDto = attendances.Select(sa => sa.ToStudentAttendanceByIdDto());
-                    return Ok(attendancesDto);
-                }*/
-        /*
-                [HttpGet("{studentId}")]
-                public async Task<IActionResult> GetAllById(long studentId)
-                {
-                    var attendances = await _studentAttendanceRepo.GetAllByStudentIdAsync(studentId);
-                    if (attendances == null)
-                    {
-                        return NotFound();
-                    }
-                    var attendancesDto = attendances.Select(sa => sa.ToStudentAttendanceByIdDto());
-                    return Ok(attendancesDto);
-                }
-
-
-
-                [HttpPut("{studentId}")]
-                public async Task<IActionResult> Update(long studentId, [FromQuery] StudentAttendanceUpdateRequestDto studentAttendanceDto)
-                {
-                    var studentAttendanceModel = studentAttendanceCreateRequestDto.ToStudentAttendanceFromCreateDto();
-                    await _studentAttendanceRepo.CreateAsync(studentAttendanceModel);
-
-                    return CreatedAtAction(nameof(GetAllById), new { studentId = studentAttendanceModel.StudentId}, studentAttendanceModel.To());
-                }*/
-
     }
 }

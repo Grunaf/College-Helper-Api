@@ -1,5 +1,5 @@
 ﻿using app.Dtos.SheduleDay;
-using app.Interfaces;
+using app.Interfaces.Shedule;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
@@ -23,7 +23,7 @@ namespace app.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return NotFound(new { ex.Message });
+                return NotFound(ex.Message);
             }
         }
         [HttpGet("{studentChatId}")]

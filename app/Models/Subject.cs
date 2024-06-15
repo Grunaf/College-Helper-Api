@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public List<SheduleDaySubject> SheduleDaySubjects { get; set; } = new List<SheduleDaySubject>();
-        public bool IsExpired { get; set; } = false;
+        public List<Homework> Homeworks { get; set; } = [];
+        public List<SheduleDaySubject> SheduleDaySubjects { get; set; } = [];
+        public List<StudentGroupSubject> StudentGroupSubjects { get; set; } = [];
     }
 }

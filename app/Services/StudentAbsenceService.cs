@@ -1,5 +1,5 @@
 ﻿using app.Dtos.StudentAbsence;
-using app.Interfaces;
+using app.Interfaces.StudentAbsense;
 using app.Mappers;
 using app.Models;
 

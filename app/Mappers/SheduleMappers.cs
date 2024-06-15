@@ -1,6 +1,4 @@
-﻿using app.Models;
-
-namespace app.Mappers
+﻿namespace app.Mappers
 {
 /*    public static class SheduleMappers
     {

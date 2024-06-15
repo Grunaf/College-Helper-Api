@@ -22,6 +22,67 @@ namespace app.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("app.Models.Homework", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("StudentGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentGroupId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Homeworks");
+                });
+
+            modelBuilder.Entity("app.Models.HomeworkFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("HomeworkId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
+
+                    b.HasIndex("HomeworkId");
+
+                    b.ToTable("HomeworkFiles");
+                });
+
             modelBuilder.Entity("app.Models.Professor", b =>
                 {
                     b.Property<int>("Id")
@@ -88,7 +149,7 @@ namespace app.Migrations
                     b.Property<string>("SubgroupSequence")
                         .HasColumnType("longtext");
 
-                    b.HasKey("SheduleDayId", "SubjectId");
+                    b.HasKey("SheduleDayId", "SubjectId", "Spot");
 
                     b.HasIndex("SubjectId");
 
@@ -220,21 +281,21 @@ namespace app.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)1,
                             StudentId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 4
                         });
@@ -279,6 +340,24 @@ namespace app.Migrations
                         });
                 });
 
+            modelBuilder.Entity("app.Models.StudentGroupSubject", b =>
+                {
+                    b.Property<int>("StudentGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("StudentGroupId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("StudentGroupSubjects");
+                });
+
             modelBuilder.Entity("app.Models.Subject", b =>
                 {
                     b.Property<int>("Id")
@@ -286,9 +365,6 @@ namespace app.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsExpired")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -302,87 +378,103 @@ namespace app.Migrations
                         new
                         {
                             Id = 1,
-                            IsExpired = false,
                             Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 2,
-                            IsExpired = false,
                             Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 3,
-                            IsExpired = false,
                             Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 4,
-                            IsExpired = false,
                             Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 5,
-                            IsExpired = false,
                             Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 6,
-                            IsExpired = false,
                             Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 7,
-                            IsExpired = false,
                             Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 8,
-                            IsExpired = false,
                             Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 9,
-                            IsExpired = false,
                             Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 10,
-                            IsExpired = false,
                             Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 11,
-                            IsExpired = false,
                             Title = "Физ-ра"
                         },
                         new
                         {
                             Id = 12,
-                            IsExpired = false,
                             Title = "Иностранный язык"
                         },
                         new
                         {
                             Id = 13,
-                            IsExpired = false,
                             Title = "Безопасность Жизндеятельности"
                         },
                         new
                         {
                             Id = 14,
-                            IsExpired = false,
                             Title = "Экономика отросли"
                         });
+                });
+
+            modelBuilder.Entity("app.Models.Homework", b =>
+                {
+                    b.HasOne("app.Models.StudentGroup", "StudentGroup")
+                        .WithMany("Homeworks")
+                        .HasForeignKey("StudentGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("app.Models.Subject", "Subject")
+                        .WithMany("Homeworks")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentGroup");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("app.Models.HomeworkFile", b =>
+                {
+                    b.HasOne("app.Models.Homework", "Homework")
+                        .WithMany("HomeworkFiles")
+                        .HasForeignKey("HomeworkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Homework");
                 });
 
             modelBuilder.Entity("app.Models.SheduleDay", b =>
@@ -406,7 +498,9 @@ namespace app.Migrations
 
                     b.HasOne("app.Models.Subject", "Subject")
                         .WithMany("SheduleDaySubjects")
-                        .HasForeignKey("SubjectId");
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SheduleDay");
 
@@ -444,6 +538,30 @@ namespace app.Migrations
                     b.Navigation("Curator");
                 });
 
+            modelBuilder.Entity("app.Models.StudentGroupSubject", b =>
+                {
+                    b.HasOne("app.Models.StudentGroup", "StudentGroup")
+                        .WithMany("StudentGroupSubjects")
+                        .HasForeignKey("StudentGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("app.Models.Subject", "Subject")
+                        .WithMany("StudentGroupSubjects")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentGroup");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("app.Models.Homework", b =>
+                {
+                    b.Navigation("HomeworkFiles");
+                });
+
             modelBuilder.Entity("app.Models.Professor", b =>
                 {
                     b.Navigation("StudentGroups");
@@ -463,11 +581,19 @@ namespace app.Migrations
                 {
                     b.Navigation("HeadBoy")
                         .IsRequired();
+
+                    b.Navigation("Homeworks");
+
+                    b.Navigation("StudentGroupSubjects");
                 });
 
             modelBuilder.Entity("app.Models.Subject", b =>
                 {
+                    b.Navigation("Homeworks");
+
                     b.Navigation("SheduleDaySubjects");
+
+                    b.Navigation("StudentGroupSubjects");
                 });
 #pragma warning restore 612, 618
         }

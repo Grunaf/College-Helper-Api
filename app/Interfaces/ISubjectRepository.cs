@@ -7,5 +7,7 @@ namespace app.Interfaces
     {
         public Task<Subject> CreateAsync(Subject subjectModel);
         public Task<Subject?> GetByNameAsync(string title);
+        public Task<List<Subject>> GetAllActualByStudentGroupIdAsync(int studentGroupId);
+        public Task<List<Subject>> GetAllByStudentGroupIdAsync(int studentGroupId);
     }
 }

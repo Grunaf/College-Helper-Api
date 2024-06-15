@@ -44,7 +44,7 @@ namespace app.Repository
                                     .Where(sg => sg.HeadBoy != null)
                                     .FirstOrDefaultAsync(sg => sg.HeadBoy.ChatId == headBoyChatId);
 
-            return studentGroupModel ?? throw new InvalidOperationException();
+            return studentGroupModel ?? throw new InvalidOperationException("Староста не найден");
         }
 
         public async Task<StudentGroup?> GetByIdAsync(int id)

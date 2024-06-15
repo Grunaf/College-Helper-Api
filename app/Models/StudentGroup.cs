@@ -20,5 +20,7 @@ namespace app.Models
         public int? CuratorId { get; set; }
         public Professor Curator { get; set; }
         public Student HeadBoy { get; set; }
+        public List<StudentGroupSubject> StudentGroupSubjects { get; set; } = [];
+        public List<Homework> Homeworks { get; set; } = [];
     }
 }

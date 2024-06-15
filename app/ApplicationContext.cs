@@ -15,6 +15,9 @@ namespace app
         public DbSet<SheduleDay> SheduleDays { get; set; } = null!;
         public DbSet<StudentAbsence> StudentAbsence { get; set; } = null!;
         public DbSet<SheduleDaySubject> SheduleDaySubjects { get; set; } = null!;
+        public DbSet<Homework> Homeworks { get; set; } = null!;
+        public DbSet<HomeworkFile> HomeworkFiles { get; set; } = null!;
+        public DbSet<StudentGroupSubject> StudentGroupSubjects { get; set; } = null!;
 
         protected readonly IConfiguration _configuration;
         public string connString;
@@ -59,8 +62,37 @@ namespace app
                 .IsUnique(false);
 
 
+            modelBuilder.Entity<HomeworkFile>()
+                .HasIndex(hf => hf.FileId)
+                .IsUnique();
+
+            modelBuilder.Entity<Homework>()
+                .HasOne(h => h.StudentGroup)
+                .WithMany(sg => sg.Homeworks)
+                .HasForeignKey(h => h.StudentGroupId);
+
+            modelBuilder.Entity<Homework>()
+                .HasOne(h => h.Subject)
+                .WithMany(s => s.Homeworks)
+                .HasForeignKey(h => h.SubjectId);
+
+
+            modelBuilder.Entity<StudentGroupSubject>()
+            .HasKey(sgs => new { sgs.StudentGroupId, sgs.SubjectId});
+
+            modelBuilder.Entity<StudentGroupSubject>()
+                .HasOne(sgs => sgs.Subject)
+                .WithMany(s => s.StudentGroupSubjects)
+                .HasForeignKey(ss => ss.SubjectId);
+
+            modelBuilder.Entity<StudentGroupSubject>()
+                .HasOne(sgs => sgs.StudentGroup)
+                .WithMany(sg => sg.StudentGroupSubjects)
+                .HasForeignKey(sgs => sgs.StudentGroupId);
+
+
             modelBuilder.Entity<SheduleDaySubject>()
-            .HasKey(ss => new { ss.SheduleDayId, ss.SubjectId });
+            .HasKey(ss => new { ss.SheduleDayId, ss.SubjectId, ss.Spot });
 
             modelBuilder.Entity<SheduleDaySubject>()
                 .HasOne(ss => ss.SheduleDay)
@@ -70,8 +102,7 @@ namespace app
             modelBuilder.Entity<SheduleDaySubject>()
                 .HasOne(ss => ss.Subject)
                 .WithMany(s => s.SheduleDaySubjects)
-                .HasForeignKey(ss => ss.SubjectId)
-                .IsRequired(false);
+                .HasForeignKey(ss => ss.SubjectId);
 
             modelBuilder.Entity<StudentGroup>().HasData(
                     new StudentGroup { Id = 1, Number = 20, Field = Field.ИСП },

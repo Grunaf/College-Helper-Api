@@ -1,5 +1,6 @@
 ﻿using app.Dtos.StudentAbsence;
 using app.Interfaces;
+using app.Interfaces.StudentAbsense;
 using app.Models;
 using System.Xml.Linq;
 
@@ -13,6 +14,20 @@ namespace app.Services
         {
             _studentRepo = studentRepo;
             _studentAbsenceRepo = studentAbsenceRepo;
+        }
+
+        public async Task<bool> IsStudentHeadboyByChatIdAsync(long chatId)
+        {
+            try
+            {
+                var student = await _studentRepo.GetByChatIdAsync(chatId);
+                return student.IsHeadBoy;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         public async Task<List<StudentAbsenceDto>> GetStatusStudentFromListAttendanceAsync(long headBoyChatId, DateTime date, byte lessonNumber)

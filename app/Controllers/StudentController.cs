@@ -1,5 +1,6 @@
 ﻿using app.Interfaces;
 using app.Mappers;
+using app.Services;
 using Microsoft.AspNetCore.JsonPatch.Internal;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
@@ -27,6 +28,19 @@ namespace app.Controllers
                 return NotFound();
             }
             return Ok(studentAttendanceDtos);
+        }
+        [HttpGet("{chatId}/role")]
+        public async Task<IActionResult> GetRoleByChatId(long chatId)
+        {
+            try
+            {
+                var isHeadBoy = await _studentService.IsStudentHeadboyByChatIdAsync(chatId);
+                return Ok(isHeadBoy);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(new { ex.Message });
+            }
         }
     }
 }

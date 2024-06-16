@@ -72,7 +72,7 @@ namespace app.Repository
             if (existingModel == null) return null;
 
             existingModel.ChatId = studentDto.IdChat;
-            existingModel.IsHeadBoy = studentDto.IsHeadboy;
+            existingModel.IsHeadBoy = studentDto.IsHeadBoy;
             existingModel.Surname = studentDto.Surname;
             existingModel.Name = studentDto.Name;
             existingModel.Patronymic = studentDto.Patronymic;

@@ -7,7 +7,6 @@ namespace app.Interfaces
     {
         Task<List<StudentGroup>> GetAllAsync();
         Task<StudentGroup?> GetByIdAsync(int id);
-        Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId);
         Task<StudentGroup?> DeleteAsync(int id);
         Task<StudentGroup> UpdateAsync(int id, UpdateStudentGroupRequestDto studentGroupDto);
         Task<StudentGroup> CreateAsync(StudentGroup studenModel);

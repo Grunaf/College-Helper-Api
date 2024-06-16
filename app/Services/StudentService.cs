@@ -10,13 +10,15 @@ namespace app.Services
     {
         private readonly IStudentRepository _studentRepo;
         private readonly IStudentAbsenceRepository _studentAbsenceRepo;
-        public StudentService(IStudentRepository studentRepo, IStudentAbsenceRepository studentAbsenceRepo)
+        private readonly IStudentGroupService _studentGroupService;
+        public StudentService(IStudentRepository studentRepo, IStudentAbsenceRepository studentAbsenceRepo, IStudentGroupService studentGroupService)
         {
             _studentRepo = studentRepo;
             _studentAbsenceRepo = studentAbsenceRepo;
+            _studentGroupService = studentGroupService;
         }
 
-        public async Task<bool> IsStudentHeadboyByChatIdAsync(long chatId)
+        public async Task<bool> IsStudentHeadBoyByChatIdAsync(long chatId)
         {
             try
             {
@@ -32,9 +34,10 @@ namespace app.Services
 
         public async Task<List<StudentAbsenceDto>> GetStatusStudentFromListAttendanceAsync(long headBoyChatId, DateTime date, byte lessonNumber)
         {
-            List<StudentAbsenceDto> studentAttendanceDtos = new();
+            List<StudentAbsenceDto> studentAttendanceDtos = [];
             var students = await _studentRepo.GetStudentsByHeadBoyChatIdAsync(headBoyChatId);
-            var absence = await _studentAbsenceRepo.GetAllByHeadBoyChatIdAsync(headBoyChatId, date, lessonNumber);
+            var studentGroupModel = await _studentGroupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
+            var absence = await _studentAbsenceRepo.GetAllByStudentGroupIdAsync(studentGroupModel.Id, date, lessonNumber);
 
             foreach (var student in students)
             {

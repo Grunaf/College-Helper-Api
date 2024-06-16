@@ -5,62 +5,35 @@ using app.Models;
 
 namespace app.Services
 {
-    public class HomeworkService : IHomeworkService
+    public class HomeworkService(IStudentGroupService studentGroupService,
+        IHomeworkRepository homeworkRepository,
+        IHomeworkFilesRepository homeworkFilesRepository) : IHomeworkService
     {
-        private readonly IStudentGroupRepository _groupRepo;
-        private readonly IHomeworkRepository _homeworkRepo;
-        private readonly IHomeworkFilesRepository _homeworkFileRepo;
-        public HomeworkService(IStudentGroupRepository studentGroupRepository, IHomeworkRepository homeworkRepository, IHomeworkFilesRepository homeworkFilesRepository)
-        {
-            _groupRepo = studentGroupRepository;
-            _homeworkRepo = homeworkRepository;
-            _homeworkFileRepo = homeworkFilesRepository;
-        }
-        public async Task<CreateHomeworkRequestDto> AddByHeadboyChatIdAsync(long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto)
-        {
-            try
-            {
-                var groupModel = await _groupRepo.GetByHeadBoyChatIdAsync(headBoyChatId);
-                var homeworkFileModels = await CreateHomeworkFileModels(groupModel.Id, createHomeworkRequestDto.FileIds);
-                var homeworkModel = CreateHomeworkModel(groupModel, homeworkFileModels, createHomeworkRequestDto);
-                await _homeworkRepo.CreateAsync(homeworkModel);
+        private readonly IHomeworkRepository _homeworkRepo = homeworkRepository;
+        private readonly IHomeworkFilesRepository _homeworkFileRepo = homeworkFilesRepository;
+        private readonly IStudentGroupService _groupService = studentGroupService;
 
-                return createHomeworkRequestDto;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+        public async Task<CreateHomeworkRequestDto> AddByHeadBoyChatIdAsync(long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto)
+        {
+            var groupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
+            var homeworkFileModels = await CreateHomeworkFileModels(groupModel.Id, createHomeworkRequestDto.FileIds);
+            var homeworkModel = CreateHomeworkModel(groupModel, homeworkFileModels, createHomeworkRequestDto);
+            await _homeworkRepo.CreateAsync(homeworkModel);
+
+            return createHomeworkRequestDto;
         }
 
         public async Task<GetFullHomeworkRequestDto> GetByIdAsync(int homeworkId)
         {
-            try
-            {
-                var homework = await _homeworkRepo.GetByIdAsync(homeworkId);
-                return homework.ToGetFullHomeworkRequestDtoFromHomeworkModel();
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            var homework = await _homeworkRepo.GetByIdAsync(homeworkId);
+            return homework.ToGetFullHomeworkRequestDtoFromHomeworkModel();
         }
 
-        public async Task<List<GetHomeworkRequestDto>?> GetBySubjectIdAndHeadboyChatIdAsync(int subjectId, int headboyChatId)
+        public async Task<List<GetHomeworkRequestDto>?> GetBySubjectIdAndHeadBoyChatIdAsync(long headBoyChatId, int subjectId)
         {
-            try
-            {
-                var groupModel = await _groupRepo.GetByHeadBoyChatIdAsync(headboyChatId);
-                var homeworks = await _homeworkRepo.GetBySubjectIdAndGroupIdAsync(subjectId, groupModel.Id);
-                return homeworks.Select(h => h.ToGetHomeworkRequestDtoFromHomeworkModel()).ToList();
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-                throw;
-            }
+            var groupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
+            var homeworks = await _homeworkRepo.GetBySubjectIdAndGroupIdAsync(subjectId, groupModel.Id);
+            return homeworks.Select(h => h.ToGetHomeworkRequestDtoFromHomeworkModel()).ToList();
         }
 
         private async Task<List<HomeworkFile>> CreateHomeworkFileModels(int groupId, List<string> fileIds)

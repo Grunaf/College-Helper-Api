@@ -24,7 +24,7 @@ namespace app.Mappers
             return new Student
             {
                 ChatId = studentDto.IdChat,
-                IsHeadBoy = studentDto.IsHeadboy,
+                IsHeadBoy = studentDto.IsHeadBoy,
                 Name = studentDto.Name,
                 Surname = studentDto.Surname,
                 Patronymic = studentDto.Patronymic,
@@ -36,7 +36,7 @@ namespace app.Mappers
             return new Student
             {
                 ChatId = studentDto.IdChat,
-                IsHeadBoy = studentDto.IsHeadboy,
+                IsHeadBoy = studentDto.IsHeadBoy,
                 Name = studentDto.Name,
                 Surname = studentDto.Surname,
                 Patronymic = studentDto.Patronymic,

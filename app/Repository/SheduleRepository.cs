@@ -47,7 +47,7 @@ namespace app.Repository
                 nextSheduleDay = await _context.SheduleDays
                                         .Include(sd => sd.SheduleDaySubjects)
                                         .ThenInclude(sds => sds.Subject)
-                                        .Where(sd => sd.StudentGroup.Id == studentGroupId && sd.CountWeek == nextWeek && sd.CountDay == 1)
+                                        .Where(sd => sd.StudentGroup.Id == studentGroupId && sd.CountWeek == nextWeek && sd.CountDay == 0)
                                         .FirstOrDefaultAsync();
             }
             return nextSheduleDay ?? throw new InvalidOperationException("Не удалось получить следующий уч. день расписания"); 

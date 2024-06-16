@@ -4,15 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace app.Controllers
 {
-    [Route("api/shedule")]
+    [Route("api/shedules")]
     [ApiController]
-    public class SheduleController : ControllerBase
+    public class SheduleController(ISheduleService sheduleService, ILogger<SheduleController> logger) : ControllerBase
     {
-        private readonly ISheduleService _sheduleService;
-        public SheduleController(ISheduleService sheduleService)
-        {
-            _sheduleService = sheduleService;
-        }
+        private readonly ISheduleService _sheduleService = sheduleService;
+        private readonly ILogger<SheduleController> _logger = logger;
+
         [HttpPost]
         public async Task<IActionResult> CreateByHeadBoyChatId([FromQuery] long headBoyChatId, CreateSheduleRequestDto sheduleDto)
         {
@@ -23,9 +21,16 @@ namespace app.Controllers
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogError(ex, "Ошибка при выполнении операции: {ErrorMessage}", ex.Message);
                 return NotFound(ex.Message);
             }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Внутренняя ошибка сервера: {ErrorMessage}", ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
         }
+
         [HttpGet("{studentChatId}")]
         public async Task<IActionResult> GetTommorowSheduleDayByChatId(long studentChatId)
         {
@@ -36,7 +41,13 @@ namespace app.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return NotFound(new { ex.Message });
+                _logger.LogError(ex, "Ошибка при выполнении операции: {ErrorMessage}", ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Внутренняя ошибка сервера: {ErrorMessage}", ex.Message);
+                return StatusCode(500, "Internal server error");
             }
         }
     }

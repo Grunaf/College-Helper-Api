@@ -38,19 +38,19 @@ namespace app.Repository
             return await _context.StudentGroups.ToListAsync();
         }
 
-        public async Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId)
+/*        public async Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId)
         {
             var studentGroupModel = await _context.StudentGroups.Include(s => s.HeadBoy)
                                     .Where(sg => sg.HeadBoy != null)
                                     .FirstOrDefaultAsync(sg => sg.HeadBoy.ChatId == headBoyChatId);
 
             return studentGroupModel ?? throw new InvalidOperationException("Староста не найден");
-        }
+        }*/
 
         public async Task<StudentGroup?> GetByIdAsync(int id)
         {
             var studentGroupModel = await _context.StudentGroups.FindAsync(id);
-            return studentGroupModel ?? throw new InvalidOperationException();
+            return studentGroupModel ?? throw new InvalidOperationException("Группа не найдена");
         }
 
         public async Task<StudentGroup> UpdateAsync(int id, UpdateStudentGroupRequestDto studentGroupDto)

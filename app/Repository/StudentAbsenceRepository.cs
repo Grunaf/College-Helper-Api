@@ -33,17 +33,12 @@ namespace app.Repository
             return absence;
         }
 
-        public async Task<List<StudentAbsence>> GetAllByHeadBoyChatIdAsync(long headBoyChatId, DateTime date, byte lessonNumber)
+        public async Task<List<StudentAbsence>> GetAllByStudentGroupIdAsync(int studentGroupId, DateTime date, byte lessonNumber)
         {
-            var headBoy = await _context.Students.FirstOrDefaultAsync(hb => hb.ChatId == headBoyChatId);
-            if (headBoy.IsHeadBoy)
-            {
-                return await _context.StudentAbsence.Include(s => s.Student).
-                    Where(sa => sa.Student.StudentGroupId == headBoy.StudentGroupId).
-                    Where(sa => sa.Date == date).Where(sa => sa.LessonNumber == lessonNumber).
-                    ToListAsync();
-            }
-            return null;
+            return await _context.StudentAbsence.Include(s => s.Student).
+                Where(sa => sa.Student.StudentGroupId == studentGroupId).
+                Where(sa => sa.Date == date).Where(sa => sa.LessonNumber == lessonNumber).
+                ToListAsync();
         }
 
         public async Task<List<StudentAbsence>> GetAllByStudentIdAsync(long studentId)
@@ -51,13 +46,12 @@ namespace app.Repository
             return await _context.StudentAbsence.Where(sa => sa.StudentId == studentId).ToListAsync();
         }
 
-        public async Task<List<StudentAbsence>> GetStatStudentAbsensesByHeadBoyChatIdAsync(long headBoyChatId)
+        public async Task<List<StudentAbsence>> GetStatStudentAbsencesByStudentGroupIdAsync(int studentGroupId)
         {
-            var headBoy = await _context.Students.FirstOrDefaultAsync(hb => hb.ChatId == headBoyChatId);
             var startEducationDate = DateTime.Now.Month >= 9 ? new DateTime(DateTime.Now.Year, 9, 1) : new DateTime(DateTime.Now.Year - 1, 9, 1);
 
             return await _context.StudentAbsence.Include(s => s.Student).
-                Where(sa => sa.Student.StudentGroupId == headBoy.StudentGroupId).
+                Where(sa => sa.Student.StudentGroupId == studentGroupId).
                 Where(sa => sa.Date >= startEducationDate).ToListAsync();
         }
         /*

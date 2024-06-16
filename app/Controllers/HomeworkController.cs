@@ -1,53 +1,55 @@
 ﻿using app.Dtos;
 using app.Interfaces;
+using app.Interfaces.Shedule;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace app.Controllers
 {
-    [Route("api/homework")]
+    [Route("api/homeworks")]
     [ApiController]
-    public class HomeworkController : ControllerBase
+    public class HomeworkController(IHomeworkService homeworkService, ILogger<HomeworkController> logger) : ControllerBase
     {
         private readonly IHomeworkService _homeworkService;
-        public HomeworkController(IHomeworkService homeworkService)
-        {
-            _homeworkService = homeworkService;
-        }
+        private readonly ILogger<HomeworkController> _logger = logger;
+
         [HttpPost]
-        public async Task<IActionResult> AddByHeadboyChatId([FromQuery] long headboyChatId, CreateHomeworkRequestDto createHomeworkRequestDto)
+        public async Task<IActionResult> AddByHeadBoyChatId([FromQuery] long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto)
         {
             try
             {
-                var homework = await _homeworkService.AddByHeadboyChatIdAsync(headboyChatId, createHomeworkRequestDto);
+                var homework = await _homeworkService.AddByHeadBoyChatIdAsync(headBoyChatId, createHomeworkRequestDto);
                 return Ok(homework);
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogError(ex, "Ошибка при выполнении операции: {ErrorMessage}", ex.Message);
                 return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже.");
+                _logger.LogError(ex, "Внутренняя ошибка сервера: {ErrorMessage}", ex.Message);
+                return StatusCode(500, "Internal server error");
             }
         }
 
         [HttpGet("subject/{subjectId}")]
-        public async Task<IActionResult> GetBySubjectIdAndHeadboyChatIdAsync(int subjectId, [FromQuery] int headboyChatId)
+        public async Task<IActionResult> GetBySubjectIdAndHeadBoyChatIdAsync(int subjectId, [FromQuery] long headBoyChatId)
         {
             try
             {
-                var homeworks = await _homeworkService.GetBySubjectIdAndHeadboyChatIdAsync(subjectId, headboyChatId);
+                var homeworks = await _homeworkService.GetBySubjectIdAndHeadBoyChatIdAsync(headBoyChatId, subjectId);
                 return Ok(homeworks);
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogError(ex, "Ошибка при выполнении операции: {ErrorMessage}", ex.Message);
                 return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже.");
+                _logger.LogError(ex, "Внутренняя ошибка сервера: {ErrorMessage}", ex.Message);
+                return StatusCode(500, "Internal server error");
             }
         }
 
@@ -62,12 +64,13 @@ namespace app.Controllers
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogError(ex, "Ошибка при выполнении операции: {ErrorMessage}", ex.Message);
                 return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже.");
+                _logger.LogError(ex, "Внутренняя ошибка сервера: {ErrorMessage}", ex.Message);
+                return StatusCode(500, "Internal server error");
             }
         }
     }

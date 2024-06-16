@@ -8,54 +8,44 @@ namespace app.Services
 {
     public class SheduleService : ISheduleService
     {
-        private readonly IStudentGroupRepository _groupRepo;
         private readonly ISheduleRepository _sheduleRepo;
         private readonly ISubjectRepository _subjectRepo;
-        private readonly IStudentRepository _studentRepo;
         private readonly IStudentGroupSubjectRepository _groupSubjectRepo;
         private readonly IStudentGroupSubjectService _groupSubjectService;
-        public SheduleService(IStudentGroupRepository groupRepository, ISheduleRepository sheduleRepository,
-                                ISubjectRepository subjectRepository, IStudentRepository studentRepository,
-                                IStudentGroupSubjectRepository groupSubjectRepository, IStudentGroupSubjectService groupSubjectService)
+        private readonly IStudentGroupService _groupService;
+        public SheduleService(ISheduleRepository sheduleRepository, ISubjectRepository subjectRepository,
+                                IStudentGroupSubjectRepository groupSubjectRepository, IStudentGroupSubjectService groupSubjectService, IStudentGroupService studentGroupService)
         {
-            _groupRepo = groupRepository;
             _sheduleRepo = sheduleRepository;
             _subjectRepo = subjectRepository;
-            _studentRepo = studentRepository;
             _groupSubjectRepo = groupSubjectRepository;
             _groupSubjectService = groupSubjectService;
+            _groupService = studentGroupService;
         }
 
         public async Task<CreateSheduleRequestDto> CreateSheduleAsync(long headBoyChatId, CreateSheduleRequestDto sheduleRequestDto)
         {
-            try
+            var studentGroupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
+
+            await _sheduleRepo.DeleteSheduleIfExistsByStudentGroupIdAsync(studentGroupModel.Id);
+
+            Dictionary<string, Subject> subjectCache = [];
+
+            for (byte w = 0; w < sheduleRequestDto.Weeks.Length; w++) //Неделя
             {
-                var groupModel = await _groupRepo.GetByHeadBoyChatIdAsync(headBoyChatId);
-                await _sheduleRepo.DeleteSheduleIfExistsByStudentGroupIdAsync(groupModel.Id);
+                var week = sheduleRequestDto.Weeks[w];
 
-                Dictionary<string, Subject> subjectCache = [];
-
-                for (byte w = 0; w < sheduleRequestDto.Weeks.Length; w++) //Неделя
+                for (byte d = 0; d < week.Days.Count; d++) //Дни
                 {
-                    var week = sheduleRequestDto.Weeks[w];
-
-                    for (byte d = 0; d < week.Days.Count; d++) //Дни
-                    {
-                        var day = week.Days[d];
-                        List<SheduleDaySubject> subjects = await ProcessPairsInDayAsync(day.PairsInDay, groupModel.Id, subjectCache);
-                        var sheduleDayModel = CreateSheduleDayModel(groupModel, w, d, subjects);
-                        await _sheduleRepo.CreateSheduleForDayAsync(sheduleDayModel);
-                    }
+                    var day = week.Days[d];
+                    List<SheduleDaySubject> subjects = await ProcessPairsInDayAsync(day.PairsInDay, studentGroupModel.Id, subjectCache);
+                    var sheduleDayModel = CreateSheduleDayModel(studentGroupModel, w, d, subjects);
+                    await _sheduleRepo.CreateSheduleForDayAsync(sheduleDayModel);
                 }
-                await _groupSubjectService.SyncGroupSubjectsFromScheduleAsync(groupModel.Id, subjectCache);
+            }
+            await _groupSubjectService.SyncGroupSubjectsFromScheduleAsync(studentGroupModel.Id, subjectCache);
 
-                return sheduleRequestDto;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            return sheduleRequestDto;
         }
 
         private async Task<List<SheduleDaySubject>> ProcessPairsInDayAsync(string pairsInDay, int studentGroupId, Dictionary<string, Subject> subjectCache)
@@ -80,7 +70,7 @@ namespace app.Services
 
                 if (subject != "-") // Если не окно
                 {
-                    Subject subjectModel = await EnsureSubjectExistsAndAssignToGroupAsync(subject, subjectCache, studentGroupId);
+                    Subject subjectModel = await EnsureSubjectExistsAndAssignToGroupAsync(subject, subjectCache);
 
                     sheduleDaySubjects.Add(new SheduleDaySubject
                     {
@@ -88,7 +78,6 @@ namespace app.Services
                         SubgroupSequence = subgroup,
                         Spot = spot
                     });
-
                 }
                 spot++;
             }
@@ -107,7 +96,7 @@ namespace app.Services
         }
 
 
-        private async Task<Subject> EnsureSubjectExistsAndAssignToGroupAsync(string subjectTitle, Dictionary<string, Subject> subjectCache, int studentGroupId)
+        private async Task<Subject> EnsureSubjectExistsAndAssignToGroupAsync(string subjectTitle, Dictionary<string, Subject> subjectCache)
         {
             if (!subjectCache.ContainsKey(subjectTitle))
             {
@@ -125,57 +114,48 @@ namespace app.Services
             {
                 StudentGroup = groupModel,
                 CountWeek = ++week,
-                CountDay = ++day,
+                CountDay = day,
                 SheduleDaySubjects = subjects,
             };
         }
 
         public async Task<GetSheduleDayRequestDto> GetTommorowSheduleDayByStudentChatIdAsync(long studentChatId)
         {
-            try
+            string[] daysOfWeeks = ["Понедельник", "Вторник", "Cреда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
+
+            var studentGroupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(studentChatId);
+
+            int totalWeeks = (DateTime.Now.DayOfYear - 1) / 7 + 1;
+            byte numberOfWeeks = (totalWeeks % 2) == 0 ? (byte)2 : (byte)1;
+
+            byte dayOfWeek = (byte)DateTime.Now.DayOfWeek;
+            dayOfWeek = (dayOfWeek == 0) ? (byte)6 : dayOfWeek--;
+
+            var sheduleDayModel = await _sheduleRepo.GetNextSheduleDayByStudentChatIdAsync(studentGroupModel.Id, numberOfWeeks, dayOfWeek);
+            var sheduleDaySubjectsModels = sheduleDayModel.SheduleDaySubjects.OrderBy(s => s.Spot).ToList();
+
+            List<GetSheduleDaySubjectRequestDto?> sheduleDaySubjectsDto = [];
+            byte spot = 1;
+            foreach (var subject in sheduleDaySubjectsModels)
             {
-                string[] daysOfWeeks = ["Понедельник", "Вторник", "Cреда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
-
-                var studentModel = await _studentRepo.GetByChatIdAsync(studentChatId);
-                var studentGroup = await _groupRepo.GetByIdAsync(studentModel.StudentGroupId);
-
-                int totalWeeks = (DateTime.Now.DayOfYear - 1) / 7 + 1;
-                byte numberOfWeeks = (totalWeeks % 2) == 0 ? (byte)2 : (byte)1;
-
-                byte dayOfWeek = (byte)DateTime.Now.DayOfWeek;
-                dayOfWeek = (dayOfWeek == 0) ? (byte)7 : dayOfWeek;
-
-                var sheduleDayModel = await _sheduleRepo.GetNextSheduleDayByStudentChatIdAsync(studentGroup.Id, numberOfWeeks, dayOfWeek);
-                var sheduleDaySubjectsModels = sheduleDayModel.SheduleDaySubjects.OrderBy(s => s.Spot).ToList();
-
-                List<GetSheduleDaySubjectRequestDto?> sheduleDaySubjectsDto = [];
-                byte spot = 1;
-                foreach (var subject in sheduleDaySubjectsModels)
+                if (subject.Spot != spot)
                 {
-                    if (subject.Spot != spot)
-                    {
-                        sheduleDaySubjectsDto.Add(null);
-                    }
-                    sheduleDaySubjectsDto.Add(new GetSheduleDaySubjectRequestDto
-                    {
-                        SubjectId = subject.SubjectId,
-                        Title = subject.Subject.Title,
-                        SubgroupSequence = subject.SubgroupSequence,
-                        Spot = subject.Spot
-                    });
-                    spot++;
+                    sheduleDaySubjectsDto.Add(null);
                 }
-                return new GetSheduleDayRequestDto {
-                        SubjectDtos = sheduleDaySubjectsDto,
-                        dayOfWeek = daysOfWeeks[sheduleDayModel.CountDay],
-                        numOfWeek = sheduleDayModel.CountWeek,
-                        };
+                sheduleDaySubjectsDto.Add(new GetSheduleDaySubjectRequestDto
+                {
+                    SubjectId = subject.SubjectId,
+                    Title = subject.Subject.Title,
+                    SubgroupSequence = subject.SubgroupSequence,
+                    Spot = subject.Spot
+                });
+                spot++;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            return new GetSheduleDayRequestDto {
+                    SubjectDtos = sheduleDaySubjectsDto,
+                    dayOfWeek = daysOfWeeks[sheduleDayModel.CountDay],
+                    numOfWeek = sheduleDayModel.CountWeek,
+                    };
         }
     }
 }

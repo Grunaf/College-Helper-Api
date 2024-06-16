@@ -30,6 +30,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ISheduleService, SheduleService>();
 builder.Services.AddScoped<IHomeworkService, HomeworkService>();
 builder.Services.AddScoped<IStudentGroupSubjectService, StudentGroupSubjectService>();
+builder.Services.AddScoped<IStudentGroupService, StudentGroupService>();
 
 builder.Services.AddScoped<IStudentAbsenceRepository, StudentAbsenceRepository>();
 builder.Services.AddScoped<IStudentGroupRepository, StudentGroupRepository>();

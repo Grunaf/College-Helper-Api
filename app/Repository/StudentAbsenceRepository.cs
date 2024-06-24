@@ -23,11 +23,8 @@ namespace app.Repository
  
         public async Task<StudentAbsence> DeleteByIdAsync(int id)
         {
-            var absence = await _context.StudentAbsence.FindAsync(id);
-            if (absence == null)
-            {
-                return null;
-            }
+            var absence = await _context.StudentAbsence.FindAsync(id) ?? throw new InvalidOperationException("Запись об отсутствии не найдена");
+
             _context.StudentAbsence.Remove(absence);
             await _context.SaveChangesAsync();
             return absence;
@@ -45,14 +42,16 @@ namespace app.Repository
         {
             return await _context.StudentAbsence.Where(sa => sa.StudentId == studentId).ToListAsync();
         }
-
-        public async Task<List<StudentAbsence>> GetStatStudentAbsencesByStudentGroupIdAsync(int studentGroupId)
+        public async Task<StudentAbsence> GetByStudentIdAndLessonNumberAsync(long studentId, int lessonNumer, DateTime date)
         {
-            var startEducationDate = DateTime.Now.Month >= 9 ? new DateTime(DateTime.Now.Year, 9, 1) : new DateTime(DateTime.Now.Year - 1, 9, 1);
+            return await _context.StudentAbsence.Where(sa => sa.StudentId == studentId && sa.LessonNumber == lessonNumer && sa.Date == date).FirstOrDefaultAsync();
+        }
 
+        public async Task<List<StudentAbsence>> GetAbsencesCountForPeriodByStudentGroupId(int studentGroupId, DateTime fromDate, DateTime toDate)
+        {
             return await _context.StudentAbsence.Include(s => s.Student).
                 Where(sa => sa.Student.StudentGroupId == studentGroupId).
-                Where(sa => sa.Date >= startEducationDate).ToListAsync();
+                Where(sa => sa.Date >= fromDate && sa.Date <= toDate).ToListAsync();
         }
         /*
        public async Task<StudentAttendance?> UpdateAsync(int id, StudentAttendanceUpdateRequestDto studentAttendanceDto)

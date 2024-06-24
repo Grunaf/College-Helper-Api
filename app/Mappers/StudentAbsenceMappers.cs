@@ -14,26 +14,12 @@ namespace app.Mappers
                 Date = studentAttendanceModel.Date
             };
         }*/
-        public static StudentAbsenceDto ToStudentAttendanceByIdDto(this StudentAbsence studentAttendanceModel)
-        {
-            return new StudentAbsenceDto
-            {
-                StudentId = studentAttendanceModel.StudentId
-            };
-        }
-/*        public static StudentAbsence ToStudentAttendanceFromCreateDto(this CreateStudentAttendanceRequestDto studentAttendanceDto)
+        public static StudentAbsence ToStudentAbsence (this CreateOrDeleteStudentAbsenceRequestDto absenceDto)
         {
             return new StudentAbsence
             {
-                StudentId = studentAttendanceDto.StudentId
-            };
-        }*/
-        public static StudentAbsence ToStudentAbsenceFromCreateOrDeleteDto(this CreateOrDeleteStudentAbsenceRequestDto studentAbsenceDto)
-        {
-            return new StudentAbsence
-            {
-                StudentId = studentAbsenceDto.StudentId,
-                LessonNumber = studentAbsenceDto.LessonNumber,
+                StudentId = absenceDto.StudentId,
+                LessonNumber = absenceDto.LessonNumber,
                 Date = DateTime.Today
             };
         }

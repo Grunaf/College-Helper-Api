@@ -4,8 +4,10 @@ namespace app.Interfaces.Shedule
 {
     public interface ISheduleRepository
     {
-        public Task<SheduleDay> CreateSheduleForDayAsync(SheduleDay sheduleDay);
-        public Task<List<SheduleDay>?> DeleteSheduleIfExistsByStudentGroupIdAsync(int studentGroupId);
-        public Task<SheduleDay> GetNextSheduleDayByStudentChatIdAsync(int studentGroupId, byte week, byte day);
+        Task<SheduleDay> CreateSheduleForDayAsync(SheduleDay sheduleDay);
+        Task<bool> CheckIfExistsSheduleDaysByStudentGroupIdAsync(int studentGroupId);
+        Task<List<SheduleDay>?> DeleteSheduleIfExistsByStudentGroupIdAsync(int studentGroupId);
+        Task<SheduleDay> GetNextSheduleDayByStudentGroupIdAsync(int studentGroupId, byte week, byte day);
+        Task<List<SheduleDay>> GetAllByStudentGroupId(int studentGroupId);
     }
 }

@@ -6,6 +6,7 @@ namespace app.Interfaces
     {
         public Task<StudentGroupSubject> CreateAsync(StudentGroupSubject studentGroupSubject);
         public Task<StudentGroupSubject?> GetBySubjectIdAsync(int subjectId);
+        public Task<StudentGroupSubject?> HasAnySubjectForStudentGroup(int studentGroupId);
         public Task<StudentGroupSubject?> UpdateAsync(StudentGroupSubject studentGroupSubject);
 
     }

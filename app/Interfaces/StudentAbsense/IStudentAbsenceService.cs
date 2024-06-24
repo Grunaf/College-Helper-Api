@@ -6,7 +6,8 @@ namespace app.Interfaces.StudentAbsense
 {
     public interface IStudentAbsenceService
     {
-        public Task<ResultCreateOrDelete> CreateOrDeleteAsync(CreateOrDeleteStudentAbsenceRequestDto absenceDto);
-        public Task<List<StatStudentAbsenceRequestDto>> GetStatStudentAbsensesByHeadBoyChatIdAsync(long headBoyChatId);
+        Task<CreateOrDeleteStudentAbsenceRequestDto?> CreateOrDeleteAsync(long headBoyChatId, CreateOrDeleteStudentAbsenceRequestDto absenceDto);
+        Task<GetCountsOfStudentsGroupAbsenceRequestDto> GetAbsencesCountForPeriodByHeadboyChatId(long headBoyChatId);
+        Task<List<StudentAbsenceDto>> GetListAttendanceOnPairAsync(long headBoyChatId, DateTime date, byte lessonNumber);
     }
 }

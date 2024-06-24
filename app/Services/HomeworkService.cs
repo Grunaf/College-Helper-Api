@@ -1,39 +1,63 @@
 ﻿using app.Dtos;
+using app.Dtos.Subject;
+using app.Exceptions;
 using app.Interfaces;
 using app.Mappers;
 using app.Models;
 
 namespace app.Services
 {
-    public class HomeworkService(IStudentGroupService studentGroupService,
+    public class HomeworkService(IStudentService studentService,
         IHomeworkRepository homeworkRepository,
         IHomeworkFilesRepository homeworkFilesRepository) : IHomeworkService
     {
         private readonly IHomeworkRepository _homeworkRepo = homeworkRepository;
         private readonly IHomeworkFilesRepository _homeworkFileRepo = homeworkFilesRepository;
-        private readonly IStudentGroupService _groupService = studentGroupService;
+        private readonly IStudentService _studentService = studentService;
 
         public async Task<CreateHomeworkRequestDto> AddByHeadBoyChatIdAsync(long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto)
         {
-            var groupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
-            var homeworkFileModels = await CreateHomeworkFileModels(groupModel.Id, createHomeworkRequestDto.FileIds);
-            var homeworkModel = CreateHomeworkModel(groupModel, homeworkFileModels, createHomeworkRequestDto);
+            var headBoyModel = await _studentService.GetHeadBoyOrThrowExceptionAsync(headBoyChatId);
+            return await AddByStudentGroupIdAsync(headBoyModel.StudentGroupId, createHomeworkRequestDto);
+        }
+        private async Task<CreateHomeworkRequestDto> AddByStudentGroupIdAsync(int studentGroupId, CreateHomeworkRequestDto createHomeworkRequestDto)
+        {
+            var homeworkFileModels = await CreateHomeworkFileModels(studentGroupId, createHomeworkRequestDto.FileIds);
+            var homeworkModel = CreateHomeworkModel(studentGroupId, homeworkFileModels, createHomeworkRequestDto);
             await _homeworkRepo.CreateAsync(homeworkModel);
 
             return createHomeworkRequestDto;
         }
 
-        public async Task<GetFullHomeworkRequestDto> GetByIdAsync(int homeworkId)
+        public async Task<GetFullHomeworkRequestDto> GetByIdByStudentChatIdAsync(long studentChatId, int homeworkId)
         {
+            var studentModel = await _studentService.GetStudentOrThrowExceptionAsync(studentChatId); //Проверка есть ли в бд
+
             var homework = await _homeworkRepo.GetByIdAsync(homeworkId);
             return homework.ToGetFullHomeworkRequestDtoFromHomeworkModel();
         }
-
-        public async Task<List<GetHomeworkRequestDto>?> GetBySubjectIdAndHeadBoyChatIdAsync(long headBoyChatId, int subjectId)
+/*
+        public async Task<List<GetSubjectRequestDto>?> GetSubjectsWhereIfHomework(long studentChatId, int subjectId)
         {
-            var groupModel = await _groupService.GetGroupByHeadBoyChatIdAsync(headBoyChatId);
-            var homeworks = await _homeworkRepo.GetBySubjectIdAndGroupIdAsync(subjectId, groupModel.Id);
+            var studentModel = await _studentService.GetStudentAsync(studentChatId);
+            var homeworks = await _homeworkRepo.GetBySubjectIdAndGroupIdIncludeSubjectAsync(subjectId, studentModel.StudentGroupId);
+
+            return homeworks.Select(h => h.Subject.ToGetSubjectRequestDto()).Distinct().ToList();
+        }*/
+        public async Task<List<GetHomeworkRequestDto>> GetBySubjectIdAndStudentChatIdAsync(long studentChatId, int subjectId)
+        {
+            var studentModel = await _studentService.GetStudentOrThrowExceptionAsync(studentChatId);
+            var homeworks = await _homeworkRepo.GetBySubjectIdAndStudentChatIdAsync(subjectId, studentModel.StudentGroupId);
+
             return homeworks.Select(h => h.ToGetHomeworkRequestDtoFromHomeworkModel()).ToList();
+        }
+
+        public async Task<CreateHomeworkRequestDto> UpdateByHeadBoyChatIdAsync(long headBoyChatId, int homeworkId, CreateHomeworkRequestDto createHomeworkRequestDto)
+        {
+            var headBoyModel = await _studentService.GetHeadBoyOrThrowExceptionAsync(headBoyChatId);
+            await _homeworkRepo.DeleteAsync(homeworkId);
+
+            return await AddByStudentGroupIdAsync(headBoyModel.StudentGroupId, createHomeworkRequestDto);
         }
 
         private async Task<List<HomeworkFile>> CreateHomeworkFileModels(int groupId, List<string> fileIds)
@@ -60,11 +84,15 @@ namespace app.Services
             }
             return homeworkFileModels;
         }
-        private Homework CreateHomeworkModel(StudentGroup groupModel, List<HomeworkFile> homeworkFiles, CreateHomeworkRequestDto createHomeworkRequestDto)
+        public async Task<List<Homework>> GetHomeworksForSubjects(List<int> subjectIds, int studentGroupId)
+        {
+            return await _homeworkRepo.GetHomeworksForSubjectsByStudentGroupIdAsync(subjectIds, studentGroupId);
+        }
+        private Homework CreateHomeworkModel(int studentGroupId, List<HomeworkFile> homeworkFiles, CreateHomeworkRequestDto createHomeworkRequestDto)
         {
             return new Homework
             {
-                StudentGroup = groupModel,
+                StudentGroupId = studentGroupId,
                 SubjectId = createHomeworkRequestDto.SubjectId,
                 Title = createHomeworkRequestDto.Title,
                 Comment = createHomeworkRequestDto.Comment,

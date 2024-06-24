@@ -9,6 +9,7 @@ namespace app.Interfaces
         Task<StudentGroup?> GetByIdAsync(int id);
         Task<StudentGroup?> DeleteAsync(int id);
         Task<StudentGroup> UpdateAsync(int id, UpdateStudentGroupRequestDto studentGroupDto);
+        Task<bool> CheckIfStudentsExceptHeadBoyExistInGroupAsync(int studentGroupId);
         Task<StudentGroup> CreateAsync(StudentGroup studenModel);
     }
 }

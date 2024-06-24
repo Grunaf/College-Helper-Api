@@ -9,7 +9,7 @@ namespace app.Models
         public SheduleDay SheduleDay { get; set; }
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
-        public string? SubgroupSequence { get; set; }
+        public char? Subgroup { get; set; }
         public byte Spot { get; set; }
     }
 }

@@ -18,6 +18,10 @@ namespace app.Repository
         {
             return await _context.StudentGroupSubjects.FirstOrDefaultAsync(sgs => sgs.SubjectId == subjectId);
         }
+        public async Task<StudentGroupSubject?> HasAnySubjectForStudentGroup(int studentGroupId)
+        {
+            return await _context.StudentGroupSubjects.FirstOrDefaultAsync(sgs => sgs.StudentGroupId == studentGroupId && !sgs.IsExpired);
+        }
 
         public async Task<StudentGroupSubject?> UpdateAsync(StudentGroupSubject studentGroupSubject)
         {

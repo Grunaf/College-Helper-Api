@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using app;
 
@@ -11,9 +12,11 @@ using app;
 namespace app.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240617172551_ChangeToCharTypeSubgroup")]
+    partial class ChangeToCharTypeSubgroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Homeworks", (string)null);
+                    b.ToTable("Homeworks");
                 });
 
             modelBuilder.Entity("app.Models.HomeworkFile", b =>
@@ -80,7 +83,7 @@ namespace app.Migrations
 
                     b.HasIndex("HomeworkId");
 
-                    b.ToTable("HomeworkFiles", (string)null);
+                    b.ToTable("HomeworkFiles");
                 });
 
             modelBuilder.Entity("app.Models.Professor", b =>
@@ -108,7 +111,7 @@ namespace app.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Professors", (string)null);
+                    b.ToTable("Professors");
                 });
 
             modelBuilder.Entity("app.Models.SheduleDay", b =>
@@ -132,7 +135,7 @@ namespace app.Migrations
 
                     b.HasIndex("StudentGroupId");
 
-                    b.ToTable("SheduleDays", (string)null);
+                    b.ToTable("SheduleDays");
                 });
 
             modelBuilder.Entity("app.Models.SheduleDaySubject", b =>
@@ -153,7 +156,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("SheduleDaySubjects", (string)null);
+                    b.ToTable("SheduleDaySubjects");
                 });
 
             modelBuilder.Entity("app.Models.Student", b =>
@@ -189,7 +192,7 @@ namespace app.Migrations
 
                     b.HasIndex("StudentGroupId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
 
                     b.HasData(
                         new
@@ -275,7 +278,7 @@ namespace app.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentAbsence", (string)null);
+                    b.ToTable("StudentAbsence");
 
                     b.HasData(
                         new
@@ -323,7 +326,7 @@ namespace app.Migrations
 
                     b.HasIndex("CuratorId");
 
-                    b.ToTable("StudentGroups", (string)null);
+                    b.ToTable("StudentGroups");
 
                     b.HasData(
                         new
@@ -355,7 +358,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("StudentGroupSubjects", (string)null);
+                    b.ToTable("StudentGroupSubjects");
                 });
 
             modelBuilder.Entity("app.Models.Subject", b =>
@@ -372,7 +375,7 @@ namespace app.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
 
                     b.HasData(
                         new

@@ -22,7 +22,7 @@ namespace app.Repository
         {
             return await _context.Subjects
             .Include(s => s.StudentGroupSubjects)
-            .Where(s => s.StudentGroupSubjects.Any(sgs => sgs.StudentGroupId == studentGroupId && sgs.IsExpired == false))
+            .Where(s => s.StudentGroupSubjects.Any(sgs => sgs.StudentGroupId == studentGroupId && !sgs.IsExpired))
             .ToListAsync();
         }
         public async Task<List<Subject>> GetAllByStudentGroupIdAsync(int studentGroupId)
@@ -32,12 +32,27 @@ namespace app.Repository
             .Where(s => s.StudentGroupSubjects.Any(sgs => sgs.StudentGroupId == studentGroupId))
             .ToListAsync();
         }
+        public async Task<List<Subject>> GetAllSubjectWhereIsHomeworkByStudentGroupIdAsync(int studentGroupId)
+        {
+            return await _context.Subjects
+            .Include(s => s.Homeworks)
+            .Where(s => s.Homeworks.Any(sgs => sgs.StudentGroupId == studentGroupId))
+            .ToListAsync();
+        }
         public async Task<Subject?> GetByNameAsync(string title)
         {
             var subjectModel = await _context.Subjects
                                     .Where(s => s.Title == title)
                                     .FirstOrDefaultAsync();
             return subjectModel;
+        }
+
+        public async Task<List<Subject>> GetSubjectsWithHomeworksByStudentGroupIdAsync(List<int> subjectIds, int studentGroupId)
+        {
+            return await _context.Subjects
+                                 .Include(s => s.Homeworks)
+                                 .Where(s => subjectIds.Contains(s.Id) && s.Homeworks.Any(h => h.StudentGroupId == studentGroupId))
+                                 .ToListAsync();
         }
     }
 }

@@ -5,13 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace app.Repository
 {
-    public class StudentGroupRepository : IStudentGroupRepository
+    public class StudentGroupRepository(ApplicationContext context) : IStudentGroupRepository
     {
-        private readonly ApplicationContext _context;
-        public StudentGroupRepository(ApplicationContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationContext _context = context;
 
         public async Task<StudentGroup> CreateAsync(StudentGroup studenModel)
         {
@@ -33,21 +29,26 @@ namespace app.Repository
             return studentGroupModel;
         }
 
+        public async Task<bool> CheckIfStudentsExceptHeadBoyExistInGroupAsync(int studentGroupId)
+        {
+            return await _context.Students.AnyAsync(s => s.StudentGroupId == studentGroupId && !s.IsHeadBoy);
+        }
+
         public async Task<List<StudentGroup>> GetAllAsync()
         {
             return await _context.StudentGroups.ToListAsync();
         }
 
-/*        public async Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId)
-        {
-            var studentGroupModel = await _context.StudentGroups.Include(s => s.HeadBoy)
-                                    .Where(sg => sg.HeadBoy != null)
-                                    .FirstOrDefaultAsync(sg => sg.HeadBoy.ChatId == headBoyChatId);
+        /*        public async Task<StudentGroup?> GetByHeadBoyChatIdAsync(long headBoyChatId)
+                {
+                    var studentGroupModel = await _context.StudentGroups.Include(s => s.HeadBoy)
+                                            .Where(sg => sg.HeadBoy != null)
+                                            .FirstOrDefaultAsync(sg => sg.HeadBoy.ChatId == headBoyChatId);
 
-            return studentGroupModel ?? throw new InvalidOperationException("Староста не найден");
-        }*/
+                    return studentGroupModel ?? throw new InvalidOperationException("Староста не найден");
+                }*/
 
-        public async Task<StudentGroup?> GetByIdAsync(int id)
+        public async Task<StudentGroup> GetByIdAsync(int id)
         {
             var studentGroupModel = await _context.StudentGroups.FindAsync(id);
             return studentGroupModel ?? throw new InvalidOperationException("Группа не найдена");

@@ -14,6 +14,16 @@ namespace app.Mappers
                 CreatedTime = homework.CreatedTime
             };
         }
+        public static GetHomeworkWithSubjectTitleRequestDto ToGetHomeworkWithSubjectTitleRequestDtoFromHomeworkModel(this Homework homework)
+        {
+            return new GetHomeworkWithSubjectTitleRequestDto
+            {
+                Id = homework.Id,
+                Topic = homework.Title,
+                SubjectTitle = homework.Subject.Title,
+                CreatedTime = homework.CreatedTime
+            };
+        }
         public static GetFullHomeworkRequestDto ToGetFullHomeworkRequestDtoFromHomeworkModel(this Homework homework)
         {
             return new GetFullHomeworkRequestDto

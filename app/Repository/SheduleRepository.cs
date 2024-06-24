@@ -1,4 +1,5 @@
-﻿using app.Interfaces.Shedule;
+﻿using app.Exceptions;
+using app.Interfaces.Shedule;
 using app.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,7 +34,17 @@ namespace app.Repository
             return sheduleDays;
         }
 
-        public async Task<SheduleDay> GetNextSheduleDayByStudentChatIdAsync(int studentGroupId, byte week, byte day)
+        public async Task<bool> CheckIfExistsSheduleDaysByStudentGroupIdAsync(int studentGroupId)
+        {
+            return await _context.SheduleDays.AnyAsync(sd => sd.StudentGroup.Id == studentGroupId);
+        }
+
+        public async Task<List<SheduleDay>> GetAllByStudentGroupId(int studentGroupId)
+        {
+            return await _context.SheduleDays.Include(sd => sd.SheduleDaySubjects).ThenInclude(sds => sds.Subject)
+                .Where(sd => sd.StudentGroupId == studentGroupId).ToListAsync();
+        }
+        public async Task<SheduleDay> GetNextSheduleDayByStudentGroupIdAsync(int studentGroupId, byte week, byte day)
         {
             var nextSheduleDay = await _context.SheduleDays
                                         .Include(sd => sd.SheduleDaySubjects)

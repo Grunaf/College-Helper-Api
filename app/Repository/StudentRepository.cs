@@ -1,17 +1,14 @@
 ﻿using app.Dtos.Student;
+using app.Exceptions;
 using app.Interfaces;
 using app.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace app.Repository
 {
-    public class StudentRepository : IStudentRepository
+    public class StudentRepository(ApplicationContext context) : IStudentRepository
     {
-        private readonly ApplicationContext _context;
-        public StudentRepository(ApplicationContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationContext _context = context;
 
         public async Task<Student> CreateAsync(Student userModel)
         {
@@ -20,12 +17,12 @@ namespace app.Repository
             return userModel;
         }
 
-        public async Task<Student?> DeleteAsync(long id)
+        public async Task<Student> DeleteAsync(int Id)
         {
-            var userModel = await _context.Students.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(x => x.Id == id);
+            var userModel = await _context.Students.FindAsync(Id);
             if (userModel == null)
             {
-                return null;
+                throw new DataNotFoundException("Студент не найден");
             }
 
             _context.Students.Remove(userModel);
@@ -42,44 +39,33 @@ namespace app.Repository
         public async Task<Student?> GetByChatIdAsync(long chatId)
         {
             var userModel = await _context.Students.FirstOrDefaultAsync(s => s.ChatId == chatId);
-            return userModel ?? throw new InvalidOperationException("Пользователь не найден");
+            return userModel;
         }
 
-        public async Task<Student?> GetByIdAsync(int id)
+        public async Task<Student> GetByIdAsync(int Id)
         {
-            var userModel = await _context.Students.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
-            return userModel ?? throw new InvalidOperationException("Пользователь не найден");
+            var userModel = await _context.Students.FindAsync(Id);
+            return userModel ?? throw new DataNotFoundException("Студент не найден");
         }
 
-        public async Task<List<Student>> GetStudentsByHeadBoyChatIdAsync(long chatId)
+        public async Task<List<Student>> GetStudentsByStudentGroupIdAsync(int studentGroupId)
         {
-            var headBoy = await _context.Students.FirstOrDefaultAsync(u => u.ChatId == chatId);
-
-            if (headBoy != null)
-            {
-                if (headBoy.IsHeadBoy)
-                {
-                    return await _context.Students.Where(u => u.StudentGroupId == headBoy.StudentGroupId).ToListAsync();
-                }
-            }
-            return null;
+            return await _context.Students.Where(u => u.StudentGroupId == studentGroupId).ToListAsync();
         }
 
-        public async Task<Student?> UpdateAsync(long id, UpdateStudentRequestDto studentDto)
+        public async Task<Student> UpdateAsync(int Id, Student studentModel)
         {
-            var existingModel = await _context.Students.Include(sg => sg.StudentGroup).FirstOrDefaultAsync(u => u.Id == id);
+            var existingModel = await _context.Students.FindAsync(Id);
 
-            if (existingModel == null) return null;
+            if (existingModel == null) throw new DataNotFoundException("Студент не найден");
 
-            existingModel.ChatId = studentDto.IdChat;
-            existingModel.IsHeadBoy = studentDto.IsHeadBoy;
-            existingModel.Surname = studentDto.Surname;
-            existingModel.Name = studentDto.Name;
-            existingModel.Patronymic = studentDto.Patronymic;
-            existingModel.StudentGroupId = studentDto.StudentGroupId;
+            existingModel.ChatId = studentModel.ChatId;
+            existingModel.IsHeadBoy = studentModel.IsHeadBoy;
+            existingModel.Surname = studentModel.Surname;
+            existingModel.Name = studentModel.Name;
+            existingModel.Patronymic = studentModel.Patronymic;
 
             await _context.SaveChangesAsync();
-
             return existingModel;
         }
     }

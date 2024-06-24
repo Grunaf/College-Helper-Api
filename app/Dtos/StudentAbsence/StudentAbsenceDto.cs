@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace app.Dtos.StudentAbsence
+﻿namespace app.Dtos.StudentAbsence
 {
     public class StudentAbsenceDto
     {

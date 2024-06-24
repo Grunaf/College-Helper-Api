@@ -1,11 +1,14 @@
 ﻿using app.Dtos;
+using app.Models;
 
 namespace app.Interfaces
 {
     public interface IHomeworkService
     {
-        public Task<CreateHomeworkRequestDto> AddByHeadBoyChatIdAsync(long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto);
-        public Task<GetFullHomeworkRequestDto> GetByIdAsync(int homeworkId);
-        public Task<List<GetHomeworkRequestDto>?> GetBySubjectIdAndHeadBoyChatIdAsync(long headBoyChatId, int subjectId);
+        Task<CreateHomeworkRequestDto> AddByHeadBoyChatIdAsync(long headBoyChatId, CreateHomeworkRequestDto createHomeworkRequestDto);
+        Task<GetFullHomeworkRequestDto> GetByIdByStudentChatIdAsync(long studentChatId, int homeworkId);
+        Task<List<GetHomeworkRequestDto>> GetBySubjectIdAndStudentChatIdAsync(long studentChatId, int subjectId);
+        Task<CreateHomeworkRequestDto> UpdateByHeadBoyChatIdAsync(long headBoyChatId, int homeworkId, CreateHomeworkRequestDto createHomeworkRequestDto);
+        Task<List<Homework>> GetHomeworksForSubjects(List<int> subjectIds, int studentGroupId);
     }
 }

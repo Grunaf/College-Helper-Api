@@ -1,6 +1,6 @@
 ﻿namespace app.Dtos.StudentAbsence
 {
-    public class StatStudentAbsenceRequestDto
+    public class CountStudentAbsencesRequestDto
     {
         public string Name { get; set; }
         public string Surname { get; set; }

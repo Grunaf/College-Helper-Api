@@ -5,9 +5,16 @@ namespace app.Mappers
 {
     public static class StudentMappers
     {
-        public static StudentDto ToUserDto(this Student studentModel)
+        public static StudentRoleInfoDto ToStudentRoleInfoDtoFromStudentModel(this Student studentModel)
         {
-            return new StudentDto
+            return new StudentRoleInfoDto
+            {
+                IsHeadBoy = studentModel.IsHeadBoy
+            };
+        }
+/*        public static GetStudentRequestDto ToUserDto(this Student studentModel)
+        {
+            return new GetStudentRequestDto
             {
                 Id = studentModel.Id,
                 IdChat = studentModel.ChatId,
@@ -15,20 +22,31 @@ namespace app.Mappers
                 Name = studentModel.Name,
                 Patronymic = studentModel.Patronymic,
                 Surname = studentModel.Surname,
-/*                StudentGroupId = userModel.StudentGroupId,
-                StudentGroup = userModel.StudentGroup.ToStudentGroupDto()*/
+*//*                StudentGroupId = userModel.StudentGroupId,
+                StudentGroup = userModel.StudentGroup.ToStudentGroupDto()*//*
             };
-        }
-        public static Student ToUserFromCreateDto(this CreateStudentRequestDto studentDto)
+        }*/
+        public static Student ToStudentFromCreateStudentDto(this StudentDto studentDto, int studentGroupId)
         {
             return new Student
             {
-                ChatId = studentDto.IdChat,
+                ChatId = studentDto.ChatId,
                 IsHeadBoy = studentDto.IsHeadBoy,
                 Name = studentDto.Name,
                 Surname = studentDto.Surname,
                 Patronymic = studentDto.Patronymic,
-                StudentGroupId = studentDto.StudentGroupId
+                StudentGroupId = studentGroupId
+            };
+        }
+        public static GetStudentRequestDto ToGetStudentDtoFromModel(this Student studentModel)
+        {
+            return new GetStudentRequestDto
+            {
+                Id = studentModel.Id,
+                ChatId = studentModel.ChatId,
+                Name = studentModel.Name,
+                Surname = studentModel.Surname,
+                Patronymic = studentModel.Patronymic,
             };
         }
         public static Student ToUserFromUpdateDto(this UpdateStudentRequestDto studentDto)

@@ -7,5 +7,6 @@ namespace app.Dtos.SheduleDay
         public string dayOfWeek { get; set; }
         public byte numOfWeek { get; set; }
         public List<GetSheduleDaySubjectRequestDto?> SubjectDtos { get; set; }
+        public List<GetHomeworkWithSubjectTitleRequestDto> HomeworksDto { get; set; }
     }
 }

@@ -8,7 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: deploy image
-    needs: publish
 
     steps:
     - name: Install SSH keys

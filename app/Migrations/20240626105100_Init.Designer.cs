@@ -12,8 +12,8 @@ using app;
 namespace app.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240613195341_AddListSubjectsOfGroup")]
-    partial class AddListSubjectsOfGroup
+    [Migration("20240626105100_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace app.Migrations
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("StudentGroupId")
                         .HasColumnType("int");
@@ -65,7 +68,7 @@ namespace app.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("FileLink")
+                    b.Property<string>("FileId")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -75,7 +78,7 @@ namespace app.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileLink")
+                    b.HasIndex("FileId")
                         .IsUnique();
 
                     b.HasIndex("HomeworkId");
@@ -146,8 +149,8 @@ namespace app.Migrations
                     b.Property<byte>("Spot")
                         .HasColumnType("tinyint unsigned");
 
-                    b.Property<string>("SubgroupSequence")
-                        .HasColumnType("longtext");
+                    b.Property<string>("Subgroup")
+                        .HasColumnType("varchar(1)");
 
                     b.HasKey("SheduleDayId", "SubjectId", "Spot");
 
@@ -281,21 +284,21 @@ namespace app.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)1,
                             StudentId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2024, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 4
                         });
@@ -348,8 +351,8 @@ namespace app.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("StudentGroupId", "SubjectId");
 
@@ -366,9 +369,6 @@ namespace app.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsExpired")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -381,85 +381,71 @@ namespace app.Migrations
                         new
                         {
                             Id = 1,
-                            IsExpired = false,
                             Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 2,
-                            IsExpired = false,
                             Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 3,
-                            IsExpired = false,
                             Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 4,
-                            IsExpired = false,
                             Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 5,
-                            IsExpired = false,
                             Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 6,
-                            IsExpired = false,
                             Title = "МДК 01.01"
                         },
                         new
                         {
                             Id = 7,
-                            IsExpired = false,
                             Title = "МДК 01.03"
                         },
                         new
                         {
                             Id = 8,
-                            IsExpired = false,
                             Title = "МДК 01.04"
                         },
                         new
                         {
                             Id = 9,
-                            IsExpired = false,
                             Title = "МДК 01.05"
                         },
                         new
                         {
                             Id = 10,
-                            IsExpired = false,
                             Title = "МДК 11.01"
                         },
                         new
                         {
                             Id = 11,
-                            IsExpired = false,
                             Title = "Физ-ра"
                         },
                         new
                         {
                             Id = 12,
-                            IsExpired = false,
                             Title = "Иностранный язык"
                         },
                         new
                         {
                             Id = 13,
-                            IsExpired = false,
                             Title = "Безопасность Жизндеятельности"
                         },
                         new
                         {
                             Id = 14,
-                            IsExpired = false,
                             Title = "Экономика отросли"
                         });
                 });

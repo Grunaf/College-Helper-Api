@@ -54,7 +54,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Homeworks", (string)null);
+                    b.ToTable("Homeworks");
                 });
 
             modelBuilder.Entity("app.Models.HomeworkFile", b =>
@@ -80,7 +80,7 @@ namespace app.Migrations
 
                     b.HasIndex("HomeworkId");
 
-                    b.ToTable("HomeworkFiles", (string)null);
+                    b.ToTable("HomeworkFiles");
                 });
 
             modelBuilder.Entity("app.Models.Professor", b =>
@@ -108,7 +108,7 @@ namespace app.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Professors", (string)null);
+                    b.ToTable("Professors");
                 });
 
             modelBuilder.Entity("app.Models.SheduleDay", b =>
@@ -132,7 +132,7 @@ namespace app.Migrations
 
                     b.HasIndex("StudentGroupId");
 
-                    b.ToTable("SheduleDays", (string)null);
+                    b.ToTable("SheduleDays");
                 });
 
             modelBuilder.Entity("app.Models.SheduleDaySubject", b =>
@@ -153,7 +153,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("SheduleDaySubjects", (string)null);
+                    b.ToTable("SheduleDaySubjects");
                 });
 
             modelBuilder.Entity("app.Models.Student", b =>
@@ -189,7 +189,7 @@ namespace app.Migrations
 
                     b.HasIndex("StudentGroupId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
 
                     b.HasData(
                         new
@@ -275,27 +275,27 @@ namespace app.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentAbsence", (string)null);
+                    b.ToTable("StudentAbsence");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)1,
                             StudentId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 2
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             LessonNumber = (byte)2,
                             StudentId = 4
                         });
@@ -323,7 +323,7 @@ namespace app.Migrations
 
                     b.HasIndex("CuratorId");
 
-                    b.ToTable("StudentGroups", (string)null);
+                    b.ToTable("StudentGroups");
 
                     b.HasData(
                         new
@@ -355,7 +355,7 @@ namespace app.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("StudentGroupSubjects", (string)null);
+                    b.ToTable("StudentGroupSubjects");
                 });
 
             modelBuilder.Entity("app.Models.Subject", b =>
@@ -372,7 +372,7 @@ namespace app.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
 
                     b.HasData(
                         new

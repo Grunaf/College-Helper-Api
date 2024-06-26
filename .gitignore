@@ -5,11 +5,12 @@
 /.vs
 /dbdata
 **/debug/
-/obj/Debug/docker-compose.dcproj.AssemblyReference.cache
+*/obj
+*/bin
+
 /app/bin/Debug/net8.0/app.dll
 /app/bin/Debug/net8.0/app.pdb
 /app/obj/Debug/net8.0/app.assets.cache
-/obj/Debug/docker-compose.dcproj.FileListAbsolute.txt
 /bin/Debug/BouncyCastle.Cryptography.dll
 /bin/Debug/Google.Protobuf.dll
 /bin/Debug/K4os.Compression.LZ4.dll
@@ -22,3 +23,5 @@
 /bin/Debug/System.Windows.Extensions.dll
 /bin/Debug/ZstdSharp.dll
 /app/obj/Debug/net8.0/app.csproj.CoreCompileInputs.cache
+*.cache
+/obj/Docker/HashOfDockerArtifacts.cache

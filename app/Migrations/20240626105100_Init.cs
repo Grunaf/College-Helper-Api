@@ -45,8 +45,7 @@ namespace app.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsExpired = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -77,6 +76,38 @@ namespace app.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Homeworks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StudentGroupId = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Comment = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Homeworks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_StudentGroups_StudentGroupId",
+                        column: x => x.StudentGroupId,
+                        principalTable: "StudentGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "SheduleDays",
                 columns: table => new
                 {
@@ -93,6 +124,32 @@ namespace app.Migrations
                         name: "FK_SheduleDays_StudentGroups_StudentGroupId",
                         column: x => x.StudentGroupId,
                         principalTable: "StudentGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "StudentGroupSubjects",
+                columns: table => new
+                {
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    StudentGroupId = table.Column<int>(type: "int", nullable: false),
+                    IsExpired = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentGroupSubjects", x => new { x.StudentGroupId, x.SubjectId });
+                    table.ForeignKey(
+                        name: "FK_StudentGroupSubjects_StudentGroups_StudentGroupId",
+                        column: x => x.StudentGroupId,
+                        principalTable: "StudentGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentGroupSubjects_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -127,13 +184,35 @@ namespace app.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "HomeworkFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    HomeworkId = table.Column<int>(type: "int", nullable: false),
+                    FileId = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeworkFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HomeworkFiles_Homeworks_HomeworkId",
+                        column: x => x.HomeworkId,
+                        principalTable: "Homeworks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "SheduleDaySubjects",
                 columns: table => new
                 {
                     SheduleDayId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     Spot = table.Column<byte>(type: "tinyint unsigned", nullable: false),
-                    SubgroupSequence = table.Column<string>(type: "longtext", nullable: true)
+                    Subgroup = table.Column<string>(type: "varchar(1)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -149,7 +228,8 @@ namespace app.Migrations
                         name: "FK_SheduleDaySubjects_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -186,23 +266,23 @@ namespace app.Migrations
 
             migrationBuilder.InsertData(
                 table: "Subjects",
-                columns: new[] { "Id", "IsExpired", "Title" },
+                columns: new[] { "Id", "Title" },
                 values: new object[,]
                 {
-                    { 1, false, "МДК 01.01" },
-                    { 2, false, "МДК 01.03" },
-                    { 3, false, "МДК 01.04" },
-                    { 4, false, "МДК 01.05" },
-                    { 5, false, "МДК 11.01" },
-                    { 6, false, "МДК 01.01" },
-                    { 7, false, "МДК 01.03" },
-                    { 8, false, "МДК 01.04" },
-                    { 9, false, "МДК 01.05" },
-                    { 10, false, "МДК 11.01" },
-                    { 11, false, "Физ-ра" },
-                    { 12, false, "Иностранный язык" },
-                    { 13, false, "Безопасность Жизндеятельности" },
-                    { 14, false, "Экономика отросли" }
+                    { 1, "МДК 01.01" },
+                    { 2, "МДК 01.03" },
+                    { 3, "МДК 01.04" },
+                    { 4, "МДК 01.05" },
+                    { 5, "МДК 11.01" },
+                    { 6, "МДК 01.01" },
+                    { 7, "МДК 01.03" },
+                    { 8, "МДК 01.04" },
+                    { 9, "МДК 01.05" },
+                    { 10, "МДК 11.01" },
+                    { 11, "Физ-ра" },
+                    { 12, "Иностранный язык" },
+                    { 13, "Безопасность Жизндеятельности" },
+                    { 14, "Экономика отросли" }
                 });
 
             migrationBuilder.InsertData(
@@ -223,10 +303,31 @@ namespace app.Migrations
                 columns: new[] { "Id", "Date", "LessonNumber", "StudentId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), (byte)1, 1 },
-                    { 2, new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), (byte)2, 2 },
-                    { 3, new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), (byte)2, 4 }
+                    { 1, new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local), (byte)1, 1 },
+                    { 2, new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local), (byte)2, 2 },
+                    { 3, new DateTime(2024, 6, 26, 0, 0, 0, 0, DateTimeKind.Local), (byte)2, 4 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeworkFiles_FileId",
+                table: "HomeworkFiles",
+                column: "FileId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeworkFiles_HomeworkId",
+                table: "HomeworkFiles",
+                column: "HomeworkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_StudentGroupId",
+                table: "Homeworks",
+                column: "StudentGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_SubjectId",
+                table: "Homeworks",
+                column: "SubjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SheduleDays_StudentGroupId",
@@ -249,6 +350,11 @@ namespace app.Migrations
                 column: "CuratorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentGroupSubjects_SubjectId",
+                table: "StudentGroupSubjects",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Students_ChatId",
                 table: "Students",
                 column: "ChatId",
@@ -264,19 +370,28 @@ namespace app.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "HomeworkFiles");
+
+            migrationBuilder.DropTable(
                 name: "SheduleDaySubjects");
 
             migrationBuilder.DropTable(
                 name: "StudentAbsence");
 
             migrationBuilder.DropTable(
+                name: "StudentGroupSubjects");
+
+            migrationBuilder.DropTable(
+                name: "Homeworks");
+
+            migrationBuilder.DropTable(
                 name: "SheduleDays");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "StudentGroups");

@@ -15,19 +15,11 @@ COPY . .
 WORKDIR "/src/app"
 RUN dotnet build "./app.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS migrations
-WORKDIR /app
-RUN dotnet tool install --version 6.0.9 --global dotnet-ef
-RUN dotnet ef migrations add InitialMigration --context ApplicationContext.cs --output-dir migrations
-
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./app.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app/migrations
-COPY --from=migrations /app/migrations .
-
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "app.dll"]

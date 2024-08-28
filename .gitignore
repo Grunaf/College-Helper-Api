@@ -8,3 +8,4 @@
 */obj
 */bin
 *.cache
+/app/obj/Debug/net8.0/app.MvcApplicationPartsAssemblyInfo.cs

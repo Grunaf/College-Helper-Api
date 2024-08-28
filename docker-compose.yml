@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   db:
@@ -20,7 +20,6 @@ services:
   app:
     depends_on:
     - db
-    image: ${DOCKER_REGISTRY-}app
     build:
       context: .
       dockerfile: app/Dockerfile
@@ -28,7 +27,14 @@ services:
       - DBHOST=db
     ports:
       - 8085:8080
-      - 8086:8081
+      - 8086:8081 
+
+  tgBot:
+    depends_on:
+    - app
+    build:
+      context: ../college_helper_bot/
+      dockerfile: Dockerfile
 
 volumes:
   dbdata:

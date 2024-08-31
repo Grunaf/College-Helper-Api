@@ -8,14 +8,10 @@ services:
        MYSQL_DATABASE: collegehelper
        MYSQL_USER: dbuser
        MYSQL_PASSWORD: dbuserpassword
-       MYSQL_TCP_PORT: 3300
-       LANG: ru_RU.UTF-8  
      volumes:
        - ./dbdata:/var/lib/mysql
-     expose:
-       - 3300
      ports:
-       - 3300:3300
+       - 3307:3306
 
   app:
     depends_on:

@@ -37,7 +37,7 @@ services:
       - app
     build:
       context: ../college_helper_bot/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-prod
     stdin_open: true  
     restart: unless-stopped
 

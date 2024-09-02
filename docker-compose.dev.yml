@@ -23,8 +23,6 @@ services:
       dockerfile: app/Dockerfile
     environment:
       - DBHOST=db
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=default
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/localhost.pfx
     user: root
     expose:
       - 8080
@@ -37,7 +35,7 @@ services:
       - app
     build:
       context: ../college_helper_bot/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     stdin_open: true  
     restart: unless-stopped
 

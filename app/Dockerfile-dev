@@ -22,7 +22,4 @@ RUN dotnet publish "./app.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-COPY ../https/localhost.pfx /https/localhost.pfx
-
 ENTRYPOINT ["dotnet", "app.dll"]

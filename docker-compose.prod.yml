@@ -20,7 +20,7 @@ services:
       - db
     build:
       context: .
-      dockerfile: app/Dockerfile
+      dockerfile: app/Dockerfile-prod
     environment:
       - DBHOST=db
       - ASPNETCORE_Kestrel__Certificates__Default__Password=default
@@ -37,7 +37,7 @@ services:
       - app
     build:
       context: ../college_helper_bot/
-      dockerfile: Dockerfile-prod
+      dockerfile: Dockerfile
     stdin_open: true  
     restart: unless-stopped
 

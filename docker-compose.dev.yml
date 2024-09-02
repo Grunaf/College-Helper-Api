@@ -20,7 +20,7 @@ services:
       - db
     build:
       context: .
-      dockerfile: app/Dockerfile
+      dockerfile: app/Dockerfile-dev
     environment:
       - DBHOST=db
     user: root
@@ -35,7 +35,7 @@ services:
       - app
     build:
       context: ../college_helper_bot/
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     stdin_open: true  
     restart: unless-stopped
 

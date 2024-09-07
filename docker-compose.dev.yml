@@ -29,7 +29,7 @@ services:
     ports:
       - 8085:8080
       - 8086:8081
-  
+
   tg-bot: 
     depends_on:
       - app

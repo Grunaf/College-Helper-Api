@@ -7,13 +7,14 @@
     <ProjectGuid>1bd67944-f1a7-49a1-bed6-5fcb7b9e89ec</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
+	<DockerComposeBaseFilePath>docker-compose.dev</DockerComposeBaseFilePath>
     <DockerServiceName>app</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
+      <DependentUpon>docker-compose.dev.yml</DependentUpon>
     </None>
-    <None Include="docker-compose.yml" />
+    <None Include="docker-compose.dev.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
 </Project>
